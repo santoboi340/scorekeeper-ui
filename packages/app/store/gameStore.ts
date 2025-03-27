@@ -7,8 +7,16 @@ export type GameState = {
 
 type Game = {
   id: string
-  teamA: { playerA: { name: string; points?: number }; playerB?: { name: string; points?: number } }
-  teamB: { playerA: { name: string; points?: number }; playerB?: { name: string; points?: number } }
+  teamA: {
+    name?: string
+    playerA: { name: string; points?: number }
+    playerB?: { name: string; points?: number }
+  }
+  teamB: {
+    name?: string
+    playerA: { name: string; points?: number }
+    playerB?: { name: string; points?: number }
+  }
   score: number
   createdAt: Date
   status: 'NEW' | 'ACTIVE' | 'COMPLETE'

@@ -1,13 +1,51 @@
-import { Button, View, YStack, getTokenValue } from '@my/ui'
+import { Button, Input, Label, View, YStack, getTokenValue } from '@my/ui'
 import { ArrowLeft, ArrowRight } from '@tamagui/lucide-icons'
 import { GameState } from 'app/store'
 import { Dispatch, SetStateAction, useState } from 'react'
 
-const GameCreator = ({ Games }: { Games: GameState }) => {
+const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
   const [page, setPage] = useState(0)
+  const [teamAName, setTeamAName] = useState(Games.games[id].teamA.name)
+  const [p1A, setP1A] = useState(Games.games[id].teamA.name)
+  const [p2A, setP2A] = useState(Games.games[id].teamA.name)
+  // const game = Games.games[id]
 
   return (
-    <YStack>
+    <YStack my="$5" gap="$5">
+      {page === 0 && (
+        <YStack>
+          {/* Team A Name */}
+          <Label htmlFor="team name">Team Name</Label>
+          <Input
+            id="team-name"
+            defaultValue="Team A"
+            value={teamAName}
+            onChangeText={setTeamAName}
+          />
+
+          {/* Player A Name */}
+          <Label htmlFor="player a name">Player A</Label>
+          <Input id="player-a-name" defaultValue="Player A" value={p1A} onChangeText={setP1A} />
+          {/* Player B(?) Name */}
+          <Label htmlFor="player a name">Player B</Label>
+          <Input id="player-b-name" defaultValue="Player b" value={p2A} onChangeText={setP2A} />
+        </YStack>
+      )}
+
+      {page === 1 && (
+        <YStack>
+          {/* Team B Name */}
+          {/* Player A Name */}
+          {/* Player B(?) Name */}
+        </YStack>
+      )}
+
+      {page === 2 && (
+        <YStack>
+          {/* Pick Server */}
+          {/* Flip Coin or Select */}
+        </YStack>
+      )}
       <PaginationControl bounded numPages={5} page={page} setPage={setPage} />
     </YStack>
   )

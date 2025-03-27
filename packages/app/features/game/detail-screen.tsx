@@ -29,7 +29,7 @@ export function GameDetailScreen({ id }: { id: string }) {
             {format(game.createdAt, 'PP')}
           </Paragraph>
 
-          {game.status === 'NEW' && <GameCreator Games={Games} />}
+          {game.status === 'NEW' && <GameCreator Games={Games} id={game.id} />}
 
           {game.status === 'ACTIVE' && (
             <Paragraph ta="center" mx="auto" fow="700" col="$blue10">
