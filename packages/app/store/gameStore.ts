@@ -10,7 +10,7 @@ type Game = {
   teamA: { playerA: { name: string; points?: number }; playerB?: { name: string; points?: number } }
   teamB: { playerA: { name: string; points?: number }; playerB?: { name: string; points?: number } }
   score: number
-  status: 'ACTIVE' | 'COMPLETE'
+  status: 'NEW' | 'ACTIVE' | 'COMPLETE'
 }
 
 export const useGames = create<GameState>((set) => ({
@@ -33,7 +33,7 @@ const createGame = (id: string): Game => {
         points: 0,
       },
     },
-    status: 'ACTIVE',
+    status: 'NEW',
     score: 0,
   }
 }
