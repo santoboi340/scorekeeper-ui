@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 export type GameState = {
-  games: Game[]
+  games: Record<string, Game>
   addGame: (id: string) => void
 }
 
@@ -10,12 +10,17 @@ type Game = {
   teamA: { playerA: { name: string; points?: number }; playerB?: { name: string; points?: number } }
   teamB: { playerA: { name: string; points?: number }; playerB?: { name: string; points?: number } }
   score: number
+  createdAt: Date
   status: 'NEW' | 'ACTIVE' | 'COMPLETE'
 }
 
 export const useGames = create<GameState>((set) => ({
-  games: [],
-  addGame: (id: string) => set((state) => ({ games: [...state.games, createGame(id)] })),
+  games: {},
+  addGame: (id: string) =>
+    set((state) => {
+      state.games[id] = createGame(id)
+      return state
+    }),
 }))
 
 const createGame = (id: string): Game => {
@@ -33,6 +38,7 @@ const createGame = (id: string): Game => {
         points: 0,
       },
     },
+    createdAt: new Date(),
     status: 'NEW',
     score: 0,
   }
