@@ -16,6 +16,7 @@
     "@tamagui/shorthands": "^1.125.26",
     "@tamagui/themes": "^1.125.26",
     "burnt": "^0.12.2",
+    "date-fns": "^4.1.0",
     "expo-constants": "~16.0.2",
     "expo-crypto": "~14.0.2",
     "expo-linking": "~6.3.1",
