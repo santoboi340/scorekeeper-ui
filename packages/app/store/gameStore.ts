@@ -24,11 +24,13 @@ const createGame = (id: string): Game => {
     teamA: {
       playerA: {
         name: 'Player A',
+        points: 0,
       },
     },
     teamB: {
       playerA: {
         name: 'Player A',
+        points: 0,
       },
     },
     status: 'ACTIVE',
