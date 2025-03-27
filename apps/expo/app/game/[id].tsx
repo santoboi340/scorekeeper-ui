@@ -1,4 +1,4 @@
-import { UserDetailScreen } from 'app/features/user/detail-screen'
+import { GameDetailScreen } from 'app/features/game/detail-screen'
 import { Stack } from 'expo-router'
 import { useParams } from 'solito/navigation'
 
@@ -15,7 +15,7 @@ export default function Screen() {
           gestureDirection: 'horizontal',
         }}
       />
-      <UserDetailScreen id={id as string} />
+      <GameDetailScreen id={id as string} />
     </>
   )
 }

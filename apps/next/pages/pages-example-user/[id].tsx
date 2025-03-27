@@ -1,4 +1,4 @@
-import { UserDetailScreen } from 'app/features/user/detail-screen'
+import { GameDetailScreen } from 'app/features/game/detail-screen'
 import Head from 'next/head'
 import { createParam } from 'solito'
 
@@ -11,7 +11,7 @@ export default function Page() {
       <Head>
         <title>User</title>
       </Head>
-      <UserDetailScreen id={id} />
+      <GameDetailScreen id={id} />
     </>
   )
 }
