@@ -23,6 +23,13 @@ export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
   const router = useRouter()
   const Games = useGames()
 
+  const createGame = () => {
+    const gameId = crypto.randomUUID()
+    console.log('Creating game - ', gameId)
+    Games.addGame(gameId)
+    router.push(`/game/${gameId}`)
+  }
+
   return (
     <YStack flex={1} justify="center" items="center" gap="$8" p="$4" bg="$background">
       <XStack
@@ -52,16 +59,7 @@ export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
         <Separator />
       </YStack>
 
-      <Button
-        onPress={() => {
-          const gameId = crypto.randomUUID()
-          console.log('Creating game - ', gameId)
-          Games.addGame(gameId)
-          router.push(`/game/${gameId}`)
-        }}
-      >
-        Start a Game
-      </Button>
+      <Button onPress={createGame}>Start a Game</Button>
       <Button
         {...useLink({
           href: '/game',
