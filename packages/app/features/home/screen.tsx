@@ -12,14 +12,16 @@ import {
   YStack,
 } from '@my/ui'
 import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
+import { useGames } from 'app/store'
+import * as crypto from 'expo-crypto'
 import { useState } from 'react'
 import { Platform } from 'react-native'
 import { useLink, useRouter } from 'solito/navigation'
-import * as Crypto from 'crypto'
 
 export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
   const linkTarget = pagesMode ? '/pages-example-user' : '/game'
   const router = useRouter()
+  const Games = useGames()
 
   return (
     <YStack flex={1} justify="center" items="center" gap="$8" p="$4" bg="$background">
@@ -52,9 +54,10 @@ export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
 
       <Button
         onPress={() => {
-          const gameId = Crypto.randomUUID()
-          console.debug('Creating game - ', gameId)
-          // router.push(`/game/${gameId}`)
+          const gameId = crypto.randomUUID()
+          console.log('Creating game - ', gameId)
+          Games.addGame(gameId)
+          router.push(`/game/${gameId}`)
         }}
       >
         Start a Game
