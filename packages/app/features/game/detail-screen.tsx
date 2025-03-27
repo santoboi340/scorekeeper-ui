@@ -6,6 +6,7 @@ import { useRouter } from 'solito/navigation'
 export function GameDetailScreen({ id }: { id: string }) {
   const router = useRouter()
   const Game = useGames()
+
   if (!id) {
     return (
       <YStack f={1} jc="center" ai="center" gap="$4" bg="$background">

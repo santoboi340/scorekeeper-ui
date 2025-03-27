@@ -1,11 +1,21 @@
-import { Button, H3, H5, Paragraph, XStack, YStack } from '@my/ui'
+import { Button, H3, H5, Paragraph, ScrollView, XStack, YStack } from '@my/ui'
 import { ChevronLeft } from '@tamagui/lucide-icons'
-import { useGames } from 'app/store'
+import { GameState, useGames } from 'app/store'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'solito/navigation'
 
 export function GameScreen() {
   const router = useRouter()
-  const Games = useGames()
+  const state = useGames()
+  const [games, setGames] = useState<GameState['games'][string][]>()
+
+  useEffect(() => {
+    const sorted = Object.values(state.games).sort((a, b) => {
+      return a.createdAt.toISOString().localeCompare(b.createdAt.toISOString())
+    })
+    setGames(sorted)
+    console.log('Sorted games by date')
+  }, [state.games])
 
   return (
     <YStack f={1} jc="center" ai="center" gap="$4" bg="$background">
@@ -13,42 +23,47 @@ export function GameScreen() {
         Match History
       </H3>
 
-      <YStack width="80%" $md={{ width: '50%' }} $lg={{ width: '35%' }} mx="auto">
-        {Games.games.length > 0 ? (
-          Games.games.map((game, idx) => (
-            <XStack key={game.id} mx="auto" gap="$5">
-              <H5 size="$7" my="auto">
-                #{idx}
-              </H5>
+      <ScrollView maxH="80%" width="80%" $md={{ width: '50%' }} $lg={{ width: '35%' }} mx="auto">
+        <YStack gap="$5">
+          {games && games.length > 0 ? (
+            games.map((game, idx) => (
               <YStack>
-                <XStack gap="$5">
-                  <H5>Team A</H5>
-                  {game.teamA.playerB ? (
-                    <Paragraph>
-                      {game.teamA.playerA.points! + game.teamA.playerB.points! + ' Points'}
-                    </Paragraph>
-                  ) : (
-                    <Paragraph>{game.teamA.playerA.points! + ' Points'}</Paragraph>
-                  )}
-                </XStack>
+                <XStack key={game.id} mx="auto" gap="$5">
+                  <H5 size="$7" my="auto">
+                    #{idx}
+                  </H5>
+                  <YStack>
+                    <XStack gap="$5">
+                      <H5>Team A</H5>
+                      {game.teamA.playerB ? (
+                        <Paragraph>
+                          {game.teamA.playerA.points! + game.teamA.playerB.points! + ' Points'}
+                        </Paragraph>
+                      ) : (
+                        <Paragraph>{game.teamA.playerA.points! + ' Points'}</Paragraph>
+                      )}
+                    </XStack>
 
-                <XStack gap="$5">
-                  <H5>Team B</H5>
-                  {game.teamB.playerB ? (
-                    <Paragraph>
-                      {game.teamB.playerA.points! + game.teamB.playerB.points! + ' Points'}
-                    </Paragraph>
-                  ) : (
-                    <Paragraph>{game.teamB.playerA.points! + ' Points'}</Paragraph>
-                  )}
+                    <XStack gap="$5">
+                      <H5>Team B</H5>
+                      {game.teamB.playerB ? (
+                        <Paragraph>
+                          {game.teamB.playerA.points! + game.teamB.playerB.points! + ' Points'}
+                        </Paragraph>
+                      ) : (
+                        <Paragraph>{game.teamB.playerA.points! + ' Points'}</Paragraph>
+                      )}
+                    </XStack>
+                  </YStack>
                 </XStack>
+                <Paragraph mx="auto">{game.createdAt.toISOString()}</Paragraph>
               </YStack>
-            </XStack>
-          ))
-        ) : (
-          <></>
-        )}
-      </YStack>
+            ))
+          ) : (
+            <></>
+          )}
+        </YStack>
+      </ScrollView>
       <Button icon={ChevronLeft} onPress={() => router.back()}>
         Go Home
       </Button>
