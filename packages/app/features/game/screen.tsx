@@ -14,7 +14,6 @@ export function GameScreen() {
       return a.createdAt.toISOString().localeCompare(b.createdAt.toISOString())
     })
     setGames(sorted)
-    console.log('Sorted games by date')
   }, [state.games])
 
   return (

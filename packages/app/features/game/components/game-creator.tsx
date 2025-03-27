@@ -8,7 +8,7 @@ const GameCreator = ({ Games }: { Games: GameState }) => {
 
   return (
     <YStack>
-      <PaginationControl numPages={5} page={page} setPage={setPage} />
+      <PaginationControl bounded numPages={5} page={page} setPage={setPage} />
     </YStack>
   )
 }
@@ -19,18 +19,22 @@ export const PaginationControl = ({
   page,
   numPages,
   hideControls,
+  bounded,
   setPage,
 }: {
   page: number
   numPages: number
   setPage: Dispatch<SetStateAction<number>>
   hideControls?: boolean
+  bounded?: boolean
 }) => {
   const handlePrevClick = () => {
-    setPage((prevIndex) => (prevIndex - 1 + numPages) % numPages)
+    setPage((prevIndex) => (bounded && prevIndex <= 1 ? 0 : (prevIndex - 1 + numPages) % numPages))
   }
   const handleNextClick = () => {
-    setPage((prevIndex) => (prevIndex + 1) % numPages)
+    setPage((prevIndex) =>
+      bounded && prevIndex >= numPages - 1 ? numPages - 1 : (prevIndex + 1) % numPages
+    )
   }
 
   const paginationWidth = (2 * getTokenValue('$2') + (numPages - 1) * getTokenValue('$0.75')) * 10
@@ -44,6 +48,7 @@ export const PaginationControl = ({
         icon={ArrowLeft}
         scaleIcon={1.5}
         onPress={handlePrevClick}
+        disabled={bounded && page === 0}
       />
       <View
         flexDirection="row"
@@ -74,6 +79,7 @@ export const PaginationControl = ({
         icon={ArrowRight}
         scaleIcon={1.5}
         onPress={handleNextClick}
+        disabled={bounded && page === numPages - 1}
       />
     </View>
   )
