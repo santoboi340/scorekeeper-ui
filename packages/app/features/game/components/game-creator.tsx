@@ -1,13 +1,14 @@
 import { Button, View, YStack, getTokenValue } from '@my/ui'
 import { ArrowLeft, ArrowRight } from '@tamagui/lucide-icons'
+import { GameState } from 'app/store'
 import { Dispatch, SetStateAction, useState } from 'react'
 
-const GameCreator = () => {
+const GameCreator = ({ Games }: { Games: GameState }) => {
   const [page, setPage] = useState(0)
 
   return (
     <YStack>
-      <PaginationControl numPages={3} page={page} setPage={setPage} />
+      <PaginationControl numPages={5} page={page} setPage={setPage} />
     </YStack>
   )
 }
@@ -16,9 +17,9 @@ export default GameCreator
 
 export const PaginationControl = ({
   page,
-  setPage,
   numPages,
   hideControls,
+  setPage,
 }: {
   page: number
   numPages: number
