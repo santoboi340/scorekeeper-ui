@@ -9,21 +9,20 @@ import {
   SwitchThemeButton,
   useToastController,
   XStack,
-  YStack
+  YStack,
 } from '@my/ui'
 import { ChevronDown, ChevronUp } from '@tamagui/lucide-icons'
 import { useState } from 'react'
 import { Platform } from 'react-native'
-import { useLink } from 'solito/navigation'
+import { useLink, useRouter } from 'solito/navigation'
+import * as Crypto from 'crypto'
 
 export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
-  const linkTarget = pagesMode ? '/pages-example-user' : '/user'
-  const linkProps = useLink({
-    href: `${linkTarget}/nate`,
-  })
+  const linkTarget = pagesMode ? '/pages-example-user' : '/game'
+  const router = useRouter()
 
   return (
-    <YStack flex={1} justify="center" items="center" gap="$8" p="$4" bg="$background">      
+    <YStack flex={1} justify="center" items="center" gap="$8" p="$4" bg="$background">
       <XStack
         position="absolute"
         width="100%"
@@ -43,19 +42,30 @@ export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
 
       <YStack gap="$4">
         <H1 text="center" color="$color12">
-          Welcome to Tamagui.
+          Welcome to Score-Pal
         </H1>
         <Paragraph color="$color10" text="center">
-          Here's a basic starter to show navigating from one screen to another.
-        </Paragraph>
-        <Separator />
-        <Paragraph text="center">
-          This screen uses the same code on Next.js and React Native.
+          Your friend for tracking your pickleball greatness!
         </Paragraph>
         <Separator />
       </YStack>
 
-      <Button {...linkProps}>Link to user</Button>
+      <Button
+        onPress={() => {
+          const gameId = Crypto.randomUUID()
+          console.debug('Creating game - ', gameId)
+          // router.push(`/game/${gameId}`)
+        }}
+      >
+        Start a Game
+      </Button>
+      <Button
+        {...useLink({
+          href: '/game',
+        })}
+      >
+        Match History
+      </Button>
 
       <SheetDemo />
     </YStack>

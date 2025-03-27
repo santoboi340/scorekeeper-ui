@@ -17,6 +17,7 @@
     "@tamagui/themes": "^1.125.26",
     "burnt": "^0.12.2",
     "expo-constants": "~16.0.2",
+    "expo-crypto": "~14.0.2",
     "expo-linking": "~6.3.1",
     "react-native-safe-area-context": "5.2.0",
     "solito": "^4.2.2"

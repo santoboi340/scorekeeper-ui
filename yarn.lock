@@ -7066,6 +7066,7 @@ __metadata:
     "@types/react-native": "npm:^0.73.0"
     burnt: "npm:^0.12.2"
     expo-constants: "npm:~16.0.2"
+    expo-crypto: "npm:~14.0.2"
     expo-linking: "npm:~6.3.1"
     react-native-safe-area-context: "npm:5.2.0"
     solito: "npm:^4.2.2"
@@ -7595,7 +7596,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base64-js@npm:^1.2.3, base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
+"base64-js@npm:^1.2.3, base64-js@npm:^1.3.0, base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
   checksum: 10/669632eb3745404c2f822a18fc3a0122d2f9a7a13f7fb8b5823ee19d1d2ff9ee5b52c53367176ea4ad093c332fd5ab4bd0ebae5a8e27917a4105a4cfc86b1005
@@ -10454,6 +10455,17 @@ __metadata:
   peerDependencies:
     expo: "*"
   checksum: 10/f2f8b15932ab2f805544fd96c6740d2354c6409706eee2664be1703c3480c7531a709112af811dc22f05c164c06501aec20f81617675e87b5a3b66ab5b8d7611
+  languageName: node
+  linkType: hard
+
+"expo-crypto@npm:~14.0.2":
+  version: 14.0.2
+  resolution: "expo-crypto@npm:14.0.2"
+  dependencies:
+    base64-js: "npm:^1.3.0"
+  peerDependencies:
+    expo: "*"
+  checksum: 10/2e6bfd0e0cbcd0dd6870660580940c0f1eb50472f096e2eedf0de591e76b3d92cdd3be8a11614c79ec4d7159ecfaf13d2518e653df176c2b1804ecf3e9167f2a
   languageName: node
   linkType: hard
 
@@ -16502,9 +16514,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scorekeeper-ui@workspace:.":
+"score-pal@workspace:.":
   version: 0.0.0-use.local
-  resolution: "scorekeeper-ui@workspace:."
+  resolution: "score-pal@workspace:."
   dependencies:
     "@babel/runtime": "npm:^7.24.6"
     "@biomejs/biome": "npm:^1.9.3"

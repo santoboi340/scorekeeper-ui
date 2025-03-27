@@ -5,14 +5,23 @@ import { useRouter } from 'solito/navigation'
 export function GameDetailScreen({ id }: { id: string }) {
   const router = useRouter()
   if (!id) {
-    return null
-  }
-  return (
-    <YStack f={1} jc="center" ai="center" gap="$4" bg="$background">
-      <Paragraph ta="center" fow="700" col="$blue10">{`User ID: ${id}`}</Paragraph>
-      <Button icon={ChevronLeft} onPress={() => router.back()}>
-        Go Home
-      </Button>
-    </YStack>
-  )
+    return (
+      <YStack f={1} jc="center" ai="center" gap="$4" bg="$background">
+        <Paragraph ta="center" fow="700" col="$blue10">
+          Game Not Found
+        </Paragraph>
+        <Button icon={ChevronLeft} onPress={() => router.back()}>
+          Go Home
+        </Button>
+      </YStack>
+    )
+  } else
+    return (
+      <YStack f={1} jc="center" ai="center" gap="$4" bg="$background">
+        <Paragraph ta="center" fow="700" col="$blue10">{`Game ID: ${id}`}</Paragraph>
+        <Button icon={ChevronLeft} onPress={() => router.back()}>
+          Go Home
+        </Button>
+      </YStack>
+    )
 }
