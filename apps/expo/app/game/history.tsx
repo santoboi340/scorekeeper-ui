@@ -1,4 +1,4 @@
-import { GameScreen } from 'app/features/game/screen'
+import { GameHistoryScreen } from 'app/features/game/history-screen'
 import { Stack } from 'expo-router'
 
 export default function Screen() {
@@ -13,7 +13,7 @@ export default function Screen() {
           gestureDirection: 'horizontal',
         }}
       />
-      <GameScreen />
+      <GameHistoryScreen />
     </>
   )
 }

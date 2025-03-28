@@ -19,7 +19,6 @@ import { Platform } from 'react-native'
 import { useLink, useRouter } from 'solito/navigation'
 
 export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
-  const linkTarget = pagesMode ? '/pages-example-user' : '/game'
   const router = useRouter()
   const Games = useGames()
 
@@ -62,7 +61,7 @@ export function HomeScreen({ pagesMode = false }: { pagesMode?: boolean }) {
       <Button onPress={createGame}>Start a Game</Button>
       <Button
         {...useLink({
-          href: '/game',
+          href: '/game/history',
         })}
       >
         Match History

@@ -4,7 +4,7 @@ import { GameState, useGames } from 'app/store'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'solito/navigation'
 
-export function GameScreen() {
+export function GameHistoryScreen() {
   const router = useRouter()
   const state = useGames()
   const [games, setGames] = useState<GameState['games'][string][]>()
