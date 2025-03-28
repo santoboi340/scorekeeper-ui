@@ -4,6 +4,7 @@ export type GameState = {
   games: Record<string, Game>
   addGame: (id: string) => void
   startGame: (game: Game) => void
+  getGame: (id: string) => Game
 }
 
 type Game = {
@@ -23,7 +24,7 @@ type Game = {
   status: 'NEW' | 'ACTIVE' | 'COMPLETE'
 }
 
-export const useGames = create<GameState>((set) => ({
+export const useGames = create<GameState>((set, get) => ({
   games: {},
   addGame: (id: string) =>
     set((state) => {
@@ -34,8 +35,10 @@ export const useGames = create<GameState>((set) => ({
     set((state) => {
       game.status = 'ACTIVE'
       state.games[game.id] = game
+      console.log('game id=%s | status=%s', game.id, game.status)
       return state
     }),
+  getGame: (id: string) => get().games[id],
 }))
 
 const createGame = (id: string): Game => {

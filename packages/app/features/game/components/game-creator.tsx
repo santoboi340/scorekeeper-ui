@@ -15,7 +15,8 @@ const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
   const [p2B, setP2B] = useState(Games.games[id].teamB.playerB?.name)
 
   const startGame = () => {
-    let currentGame = Games.games[id]
+    console.debug('Starting game')
+    let currentGame = { ...Games.games[id] }
     currentGame.teamA.name = teamAName
     currentGame.teamB.name = teamBName
     currentGame.teamA.playerA.name = p1A
@@ -50,9 +51,9 @@ const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
           </YStack>
           {/* Team A Name */}
           <YStack>
-            <Label htmlFor="team name">Team Name</Label>
+            <Label htmlFor="team-a-name">Team Name</Label>
             <Input
-              id="team-name"
+              id="team-a-name"
               defaultValue="Team A"
               value={teamAName}
               onChangeText={setTeamAName}
@@ -61,16 +62,21 @@ const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
 
           {/* Player A Name */}
           <YStack>
-            <Label htmlFor="player a name">Player A</Label>
-            <Input id="player-a-name" defaultValue="Player A" value={p1A} onChangeText={setP1A} />
+            <Label htmlFor="team-a-player-a-name">Player A</Label>
+            <Input
+              id="team-a-player-a-name"
+              defaultValue="Player A"
+              value={p1A}
+              onChangeText={setP1A}
+            />
           </YStack>
           {/* Player B(?) Name */}
           {!singles && (
             <YStack>
-              <Label htmlFor="player a name">Player B</Label>
+              <Label htmlFor="team-a-player-b-name">Player B</Label>
               <Input
                 disabled={singles}
-                id="player-b-name"
+                id="team-a-player-b-name"
                 defaultValue={singles ? '' : 'Player B'}
                 value={p2A}
                 onChangeText={setP2A}
@@ -84,9 +90,9 @@ const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
         <YStack>
           {/* Team B Name */}
           <YStack>
-            <Label htmlFor="team name">Team Name</Label>
+            <Label htmlFor="team-b-name">Team Name</Label>
             <Input
-              id="team-name"
+              id="team-b-name"
               defaultValue="Team B"
               value={teamBName}
               onChangeText={setTeamBName}
@@ -95,15 +101,25 @@ const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
 
           {/* Player A Name */}
           <YStack>
-            <Label htmlFor="player a name">Player A</Label>
-            <Input id="player-a-name" defaultValue="Player A" value={p1B} onChangeText={setP1B} />
+            <Label htmlFor="team-b-player-a-name">Player A</Label>
+            <Input
+              id="team-b-player-a-name"
+              defaultValue="Player A"
+              value={p1B}
+              onChangeText={setP1B}
+            />
           </YStack>
 
           {/* Player B(?) Name */}
           {!singles && (
             <YStack>
-              <Label htmlFor="player a name">Player B</Label>
-              <Input id="player-b-name" defaultValue="Player B" value={p2B} onChangeText={setP2B} />
+              <Label htmlFor="team-b-player-b-name">Player B</Label>
+              <Input
+                id="team-b-player-b-name"
+                defaultValue="Player B"
+                value={p2B}
+                onChangeText={setP2B}
+              />
             </YStack>
           )}
         </YStack>
