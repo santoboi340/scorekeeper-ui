@@ -1,34 +1,66 @@
-import { Button, Input, Label, View, YStack, getTokenValue } from '@my/ui'
-import { ArrowLeft, ArrowRight } from '@tamagui/lucide-icons'
+import { Button, Checkbox, Input, Label, View, YStack, getTokenValue } from '@my/ui'
+import { ArrowLeft, ArrowRight, Check } from '@tamagui/lucide-icons'
 import { GameState } from 'app/store'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
   const [page, setPage] = useState(0)
+  const [singles, setSingles] = useState(false)
   const [teamAName, setTeamAName] = useState(Games.games[id].teamA.name)
-  const [p1A, setP1A] = useState(Games.games[id].teamA.name)
-  const [p2A, setP2A] = useState(Games.games[id].teamA.name)
+  const [p1A, setP1A] = useState(Games.games[id].teamA.playerA.name)
+  const [p2A, setP2A] = useState(Games.games[id].teamA.playerB?.name)
+  // team B
+  const [teamBName, setTeamBName] = useState(Games.games[id].teamB.name)
+  const [p1B, setP1B] = useState(Games.games[id].teamB.playerA.name)
+  const [p2B, setP2B] = useState(Games.games[id].teamB.playerB?.name)
   // const game = Games.games[id]
 
   return (
     <YStack my="$5" gap="$5">
       {page === 0 && (
-        <YStack>
+        <YStack width="90%" mx="auto">
+          <YStack>
+            <Label htmlFor="player a name">Is this a 1v1?</Label>
+            <Checkbox
+              id="is2Player"
+              checked={singles}
+              onCheckedChange={(e) => {
+                console.log(e)
+                setSingles(e)
+              }}
+            >
+              <Checkbox.Indicator>
+                <Check />
+              </Checkbox.Indicator>
+            </Checkbox>
+          </YStack>
           {/* Team A Name */}
-          <Label htmlFor="team name">Team Name</Label>
-          <Input
-            id="team-name"
-            defaultValue="Team A"
-            value={teamAName}
-            onChangeText={setTeamAName}
-          />
+          <YStack>
+            <Label htmlFor="team name">Team Name</Label>
+            <Input
+              id="team-name"
+              defaultValue="Team A"
+              value={teamAName}
+              onChangeText={setTeamAName}
+            />
+          </YStack>
 
           {/* Player A Name */}
-          <Label htmlFor="player a name">Player A</Label>
-          <Input id="player-a-name" defaultValue="Player A" value={p1A} onChangeText={setP1A} />
+          <YStack>
+            <Label htmlFor="player a name">Player A</Label>
+            <Input id="player-a-name" defaultValue="Player A" value={p1A} onChangeText={setP1A} />
+          </YStack>
           {/* Player B(?) Name */}
-          <Label htmlFor="player a name">Player B</Label>
-          <Input id="player-b-name" defaultValue="Player b" value={p2A} onChangeText={setP2A} />
+          <YStack>
+            <Label htmlFor="player a name">Player B</Label>
+            <Input
+              disabled={singles}
+              id="player-b-name"
+              defaultValue={singles ? '' : 'Player B'}
+              value={p2A}
+              onChangeText={setP2A}
+            />
+          </YStack>
         </YStack>
       )}
 
