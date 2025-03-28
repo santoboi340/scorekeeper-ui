@@ -1,6 +1,6 @@
-import { Button, Checkbox, Input, Label, View, YStack, getTokenValue } from '@my/ui'
+import { Button, Checkbox, getTokenValue, Input, Label, View, YStack } from '@my/ui'
 import { ArrowLeft, ArrowRight, Check } from '@tamagui/lucide-icons'
-import { GameState } from 'app/store'
+import { createPlayer, GameState } from 'app/store'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
@@ -13,12 +13,26 @@ const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
   const [teamBName, setTeamBName] = useState(Games.games[id].teamB.name)
   const [p1B, setP1B] = useState(Games.games[id].teamB.playerA.name)
   const [p2B, setP2B] = useState(Games.games[id].teamB.playerB?.name)
-  // const game = Games.games[id]
+
+  const startGame = () => {
+    let currentGame = Games.games[id]
+    currentGame.teamA.name = teamAName
+    currentGame.teamB.name = teamBName
+    currentGame.teamA.playerA.name = p1A
+    currentGame.teamB.playerA.name = p1B
+    if (!singles) {
+      currentGame.teamA.playerB = createPlayer(true)
+      currentGame.teamB.playerB = createPlayer(true)
+      currentGame.teamA.playerB!.name! = p2A!
+      currentGame.teamB.playerB!.name! = p2B!
+    }
+    Games.startGame(currentGame)
+  }
 
   return (
-    <YStack my="$5" gap="$5">
+    <YStack my="$5" gap="$5" width="90%" mx="auto">
       {page === 0 && (
-        <YStack width="90%" mx="auto">
+        <YStack>
           <YStack>
             <Label htmlFor="player a name">Is this a 1v1?</Label>
             <Checkbox
@@ -51,24 +65,47 @@ const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
             <Input id="player-a-name" defaultValue="Player A" value={p1A} onChangeText={setP1A} />
           </YStack>
           {/* Player B(?) Name */}
-          <YStack>
-            <Label htmlFor="player a name">Player B</Label>
-            <Input
-              disabled={singles}
-              id="player-b-name"
-              defaultValue={singles ? '' : 'Player B'}
-              value={p2A}
-              onChangeText={setP2A}
-            />
-          </YStack>
+          {!singles && (
+            <YStack>
+              <Label htmlFor="player a name">Player B</Label>
+              <Input
+                disabled={singles}
+                id="player-b-name"
+                defaultValue={singles ? '' : 'Player B'}
+                value={p2A}
+                onChangeText={setP2A}
+              />
+            </YStack>
+          )}
         </YStack>
       )}
 
       {page === 1 && (
         <YStack>
           {/* Team B Name */}
+          <YStack>
+            <Label htmlFor="team name">Team Name</Label>
+            <Input
+              id="team-name"
+              defaultValue="Team B"
+              value={teamBName}
+              onChangeText={setTeamBName}
+            />
+          </YStack>
+
           {/* Player A Name */}
+          <YStack>
+            <Label htmlFor="player a name">Player A</Label>
+            <Input id="player-a-name" defaultValue="Player A" value={p1B} onChangeText={setP1B} />
+          </YStack>
+
           {/* Player B(?) Name */}
+          {!singles && (
+            <YStack>
+              <Label htmlFor="player a name">Player B</Label>
+              <Input id="player-b-name" defaultValue="Player B" value={p2B} onChangeText={setP2B} />
+            </YStack>
+          )}
         </YStack>
       )}
 
@@ -76,9 +113,12 @@ const GameCreator = ({ Games, id }: { Games: GameState; id: string }) => {
         <YStack>
           {/* Pick Server */}
           {/* Flip Coin or Select */}
+          <Button theme="green" onPress={startGame}>
+            Start Game
+          </Button>
         </YStack>
       )}
-      <PaginationControl bounded numPages={5} page={page} setPage={setPage} />
+      <PaginationControl bounded numPages={3} page={page} setPage={setPage} />
     </YStack>
   )
 }
@@ -110,9 +150,9 @@ export const PaginationControl = ({
   const paginationWidth = (2 * getTokenValue('$2') + (numPages - 1) * getTokenValue('$0.75')) * 10
 
   return (
-    <View flex={1} flexDirection="row" alignItems="center" justifyContent="center" gap="$3">
+    <View flex={1} flexDirection="row" alignItems="center" justifyContent="center" mt="$5" gap="$3">
       <Button
-        display={hideControls ? 'none' : 'block'}
+        display={hideControls || page == 0 ? 'none' : 'block'}
         size="$4"
         circular
         icon={ArrowLeft}
@@ -143,7 +183,7 @@ export const PaginationControl = ({
         ))}
       </View>
       <Button
-        display={hideControls ? 'none' : 'block'}
+        display={hideControls || page == numPages - 1 ? 'none' : 'block'}
         size="$4"
         circular
         icon={ArrowRight}
