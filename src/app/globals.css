@@ -97,7 +97,9 @@ body {
     animation: fade-in 0.3s ease-out;
 }
 
-/*   API STUFF * /
+/*API STUFF*/
+/* Header */
+
 .api-dashboard {
     background: var(--color-brand-primary);
     color: var(--color-brand-cream);
@@ -105,8 +107,6 @@ body {
     display: flex;
     flex-direction: column;
 }
-
-/* Header */
 .header {
     background: var(--color-brand-secondary);
     border-bottom: 1px solid var(--color-accent-gold);
