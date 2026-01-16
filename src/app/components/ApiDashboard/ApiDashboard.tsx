@@ -2,7 +2,6 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { useApiCall } from 'root/hooks/useDashboard'
-import './api.css'
 
 const ApiDashboard = () => {
     const [selectedEndpoint, setSelectedEndpoint] = useState(ENDPOINTS.auth[0])

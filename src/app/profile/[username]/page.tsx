@@ -6,7 +6,7 @@ import { use } from 'react'
 import { useProfile } from '../../../hooks/userProfile'
 import ProfileView from '../../components/Profile/ProfileView'
 import Link from 'next/link'
-import { ProtectedRoute } from '@/app/components/ProtectedRoute.tsx/ProtectedRoute'
+import { ProtectedRoute } from '@/components/ProtectedRoute.tsx/ProtectedRoute'
 export default function ProfilePage({
     params,
 }: {

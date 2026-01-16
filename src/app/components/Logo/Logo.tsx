@@ -1,9 +1,8 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { LogoProps } from './Logo.d'
-import { useIsMobile } from '@/hooks/useIsMobile'
+import { useIsMobile } from 'root/hooks/useIsMobile'
 
 const Logo = ({ imageUrl, alt = 'Logo', href = '/' }: LogoProps) => {
     const isMobile = useIsMobile()
@@ -11,10 +10,10 @@ const Logo = ({ imageUrl, alt = 'Logo', href = '/' }: LogoProps) => {
     const logoContent = (
         <div className="flex items-center">
             {imageUrl ? (
-                <Image
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
                     src={imageUrl}
                     alt={alt}
-                    className="object-contain"
                     width={isMobile ? 120 : 150}
                     height={isMobile ? 80 : 100}
                 />

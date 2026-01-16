@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { type DesktopMenuLink, DesktopMenuProps } from './DesktopMenu.d'
 import { Logo } from '../Logo'
-import { useAuth } from '@/app/context/AuthContext'
+import { useAuth } from '@/context/AuthContext'
 
 const defaultLinks: DesktopMenuLink[] = [
     { label: 'Home', href: '/' },
@@ -20,7 +20,6 @@ const DesktopMenu = ({
 }: DesktopMenuProps) => {
     const { user, isAuthenticated, logout } = useAuth()
 
-    console.log('current auth status in DesktopMenu:', isAuthenticated)
     const handleLinkClick = (link: DesktopMenuLink) => {
         if (link.onClick) {
             link.onClick()
