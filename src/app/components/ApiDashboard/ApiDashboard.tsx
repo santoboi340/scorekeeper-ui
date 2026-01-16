@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import React, { useState, useEffect } from 'react'
+import { useApiCall } from 'root/hooks/useDashboard'
 import './api.css'
 
 const ApiDashboard = () => {
@@ -8,105 +9,50 @@ const ApiDashboard = () => {
     const [activeTab, setActiveTab] = useState('headers')
     const [method, setMethod] = useState('POST')
     const [url, setUrl] = useState('/api/v1/auth/authenticate')
-    const [params, setParams] = useState<any>([])
+    const [params, setParams] = useState<Array<{ key: string; value: string }>>(
+        []
+    )
     const [body, setBody] = useState('{\n  "email": "",\n  "password": ""\n}')
-    const [response, setResponse] = useState<any>(null)
-    const [loading, setLoading] = useState(false)
+
+    const apiCall = useApiCall()
+
     // Update form when endpoint changes
     useEffect(() => {
         setMethod(selectedEndpoint.method)
         setUrl(selectedEndpoint.path)
         setBody(selectedEndpoint.body)
-        setResponse(null)
     }, [selectedEndpoint])
+
     const handleEndpointClick = (endpoint: any) => {
         setSelectedEndpoint(endpoint)
     }
+
     const addParam = () => {
         setParams([...params, { key: '', value: '' }])
     }
-    const updateParam = ({ index, field, value }: any) => {
+
+    const updateParam = (
+        index: number,
+        field: 'key' | 'value',
+        value: string
+    ) => {
         const updated = [...params]
         updated[index][field] = value
         setParams(updated)
     }
-    const removeParam = (index: any) => {
-        setParams(params.filter(({ _, i }: any) => i !== index))
+
+    const removeParam = (index: number) => {
+        setParams(params.filter((_, i) => i !== index))
     }
-    const sendRequest = async () => {
-        setLoading(true)
-        const startTime = Date.now()
-        console.log('This is the Current Data being sent:')
-        console.log('Method:', method)
-        console.log('URL:', url)
-        console.log('Headers:', {
-            'Content-Type': 'application/json',
-            // Add auth header if needed
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        })
-        console.log('Body:', body)
-        try {
-            // Build URL with params
-            const baseURL = 'https://scorepal-dev.mts-lab.net'
-            let finalUrl = `${baseURL}${url}`
-            const token = localStorage.getItem('access_token')
-            if (params.length > 0) {
-                const queryString = params
-                    .filter((p: any) => p.key && p.value)
-                    .map(
-                        (p: any) =>
-                            `${encodeURIComponent(p.key)}=${encodeURIComponent(p.value)}`
-                    )
-                    .join('&')
-                finalUrl += `?${queryString}`
-            }
-            // Parse body if present
-            let bodyData = null
-            if (
-                body &&
-                (method === 'POST' || method === 'PUT' || method === 'PATCH')
-            ) {
-                try {
-                    bodyData = JSON.parse(body)
-                } catch (e) {
-                    throw new Error('Invalid JSON in request body')
-                }
-            }
-            console.log('Final URL:', finalUrl)
-            console.log(bodyData ? 'With Body:' : 'No Body')
-            // Make request
-            const res = await fetch('api/auth/api-dashboard', {
-                method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: bodyData ? JSON.stringify(bodyData) : undefined,
-            })
-            const responseTime = Date.now() - startTime
-            const data = await res.json()
-            setResponse({
-                status: res.status,
-                statusText: res.statusText,
-                time: responseTime,
-                data: data,
-                headers: Object.fromEntries(res.headers.entries()),
-            })
-        } catch (error) {
-            const responseTime = Date.now() - startTime
-            setResponse({
-                status: 0,
-                statusText: 'Error',
-                time: responseTime,
-                data: { error: error },
-            })
-        } finally {
-            setLoading(false)
-        }
+
+    const sendRequest = () => {
+        apiCall.mutate({ method, url, params, body })
     }
+
     const formatJSON = (obj: any) => {
         return JSON.stringify(obj, null, 2)
     }
+
     const syntaxHighlight = (json: string) => {
         json = json
             .replace(/&/g, '&amp;')
@@ -131,14 +77,16 @@ const ApiDashboard = () => {
             }
         )
     }
+
     return (
-        <div className="api-dashboard ">
+        <div className="api-dashboard">
             {/* Header */}
             <header className="header">
                 <h1>
                     <span>⚡</span> API Dashboard
                 </h1>
             </header>
+
             <div className="dashboard-container">
                 {/* Sidebar */}
                 <aside className="sidebar">
@@ -157,7 +105,11 @@ const ApiDashboard = () => {
                             {endpoints.map((endpoint) => (
                                 <div
                                     key={endpoint.id}
-                                    className={`endpoint-item ${selectedEndpoint.id === endpoint.id ? 'active' : ''} ${category}`}
+                                    className={`endpoint-item ${
+                                        selectedEndpoint.id === endpoint.id
+                                            ? 'active'
+                                            : ''
+                                    } ${category}`}
                                     onClick={() =>
                                         handleEndpointClick(endpoint)
                                     }
@@ -184,6 +136,7 @@ const ApiDashboard = () => {
                         </div>
                     ))}
                 </aside>
+
                 {/* Main Content */}
                 <main className="main-content">
                     <div className="request-builder">
@@ -191,10 +144,11 @@ const ApiDashboard = () => {
                         <div className="auth-info">
                             <span className="auth-icon">🔒</span>
                             <span>
-                                Using admin JWT from local/session storage for
+                                Using JWT from local/session storage for
                                 authenticated requests
                             </span>
                         </div>
+
                         {/* URL Input */}
                         <div className="builder-section">
                             <div className="url-input-group">
@@ -218,6 +172,7 @@ const ApiDashboard = () => {
                                 />
                             </div>
                         </div>
+
                         {/* Tabs */}
                         <div className="tabs">
                             <button
@@ -239,16 +194,35 @@ const ApiDashboard = () => {
                                 Body
                             </button>
                         </div>
+
                         {/* Tab Content - Headers */}
                         <div
-                            className={`tab-content ${activeTab === 'headers' ? 'active' : ''}`}
-                        ></div>
-                        {/* Tab Content - Params */}
-                        <div
-                            className={`tab-content ${activeTab === 'params' ? 'active' : ''}`}
+                            className={`tab-content ${
+                                activeTab === 'headers' ? 'active' : ''
+                            }`}
                         >
                             <div className="builder-section">
-                                {params.map(({ param, index }: any) => (
+                                <div className="header-info">
+                                    <p>
+                                        <strong>Content-Type:</strong>{' '}
+                                        application/json
+                                    </p>
+                                    <p>
+                                        <strong>Authorization:</strong> Bearer
+                                        [token]
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Tab Content - Params */}
+                        <div
+                            className={`tab-content ${
+                                activeTab === 'params' ? 'active' : ''
+                            }`}
+                        >
+                            <div className="builder-section">
+                                {params.map((param, index) => (
                                     <div
                                         key={index}
                                         className="param-input-group"
@@ -259,11 +233,11 @@ const ApiDashboard = () => {
                                             placeholder="Key"
                                             value={param.key}
                                             onChange={(e) =>
-                                                updateParam({
+                                                updateParam(
                                                     index,
-                                                    field: 'key',
-                                                    value: e.target.value,
-                                                })
+                                                    'key',
+                                                    e.target.value
+                                                )
                                             }
                                         />
                                         <input
@@ -272,11 +246,11 @@ const ApiDashboard = () => {
                                             placeholder="Value"
                                             value={param.value}
                                             onChange={(e) =>
-                                                updateParam({
+                                                updateParam(
                                                     index,
-                                                    field: 'value',
-                                                    value: e.target.value,
-                                                })
+                                                    'value',
+                                                    e.target.value
+                                                )
                                             }
                                         />
                                         <button
@@ -292,6 +266,7 @@ const ApiDashboard = () => {
                                 </button>
                             </div>
                         </div>
+
                         {/* Tab Content - Body */}
                         <div
                             className={`tab-content ${activeTab === 'body' ? 'active' : ''}`}
@@ -305,35 +280,51 @@ const ApiDashboard = () => {
                                 />
                             </div>
                         </div>
+
                         {/* Send Button */}
                         <button
                             className="btn-send"
                             onClick={sendRequest}
-                            disabled={loading}
+                            disabled={apiCall.isPending}
                         >
-                            {loading ? 'Sending...' : 'Send Request'}
+                            {apiCall.isPending ? 'Sending...' : 'Send Request'}
                         </button>
                     </div>
+
                     {/* Response Section */}
                     <div className="response-section">
                         <div className="section-title">Response</div>
-                        {response ? (
+
+                        {apiCall.isError && (
+                            <div className="error-state">
+                                <div className="error-icon">❌</div>
+                                <p>Error: {apiCall.error.message}</p>
+                            </div>
+                        )}
+
+                        {apiCall.data ? (
                             <>
                                 <div className="response-header">
                                     <span
-                                        className={`status-badge ${response.status >= 200 && response.status < 300 ? 'success' : 'error'}`}
+                                        className={`status-badge ${
+                                            apiCall.data.status >= 200 &&
+                                            apiCall.data.status < 300
+                                                ? 'success'
+                                                : 'error'
+                                        }`}
                                     >
-                                        {response.status} {response.statusText}
+                                        {apiCall.data.status}{' '}
+                                        {apiCall.data.statusText}
                                     </span>
                                     <span className="response-time">
-                                        {response.time}ms
+                                        {apiCall.data.time}ms
                                     </span>
                                 </div>
                                 <div
                                     className="response-body"
                                     dangerouslySetInnerHTML={{
                                         __html: syntaxHighlight(
-                                            formatJSON(response.data)
+                                            formatJSON(apiCall.data.data)
                                         ),
                                     }}
                                 />
@@ -353,6 +344,7 @@ const ApiDashboard = () => {
 
 export default ApiDashboard
 
+// ... CATEGORY_CONFIG and ENDPOINTS remain the same
 const CATEGORY_CONFIG: any = {
     auth: { color: '#10b981', label: 'Auth' },
     user: { color: '#3b82f6', label: 'User' },
@@ -390,7 +382,7 @@ const ENDPOINTS = {
             method: 'PATCH',
             name: 'Patch User',
             path: '/api/v1/user/me',
-            body: '{\n  "additionalProp1": "",\n  "additionalProp2": ""\n,\n  "additionalProp3": ""\n}',
+            body: '{\n  "additionalProp1": "",\n  "additionalProp2": "",\n  "additionalProp3": ""\n}',
         },
         {
             id: 'user-get-user',

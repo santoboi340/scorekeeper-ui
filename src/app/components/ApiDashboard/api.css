@@ -369,7 +369,29 @@
     max-height: 45vh;
     overflow-y: auto;
 }
+.error-state {
+    text-align: center;
+    padding: 2rem;
+    color: #ef4444;
+}
 
+.error-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.header-info {
+    padding: 1rem;
+    border-radius: 8px;
+    border: solid;
+    border-color: var(--color-accent-gold);
+    font-family: monospace;
+    font-size: 14px;
+}
+
+.header-info p {
+    margin: 0.5rem 0;
+}
 .response-header {
     display: flex;
     justify-content: space-between;
