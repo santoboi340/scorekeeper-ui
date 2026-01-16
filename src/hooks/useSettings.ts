@@ -80,9 +80,6 @@ export function useSettings(username: string): UseSettingsResult {
             }
 
             setSettings(updatedSettings)
-
-            // TODO: In real app, this would call your API
-            console.log('Settings updated:', updates)
         } catch (err) {
             setError('Failed to save settings')
             throw err

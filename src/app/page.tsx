@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import { FaUsers, FaTrophy, FaCalendarAlt, FaChartLine } from 'react-icons/fa'
 

@@ -6,7 +6,7 @@ import { use } from 'react'
 import { useProfile } from '../../../hooks/userProfile'
 import ProfileView from '../../components/Profile/ProfileView'
 import Link from 'next/link'
-
+import { ProtectedRoute } from '@/app/components/ProtectedRoute.tsx/ProtectedRoute'
 export default function ProfilePage({
     params,
 }: {
@@ -38,7 +38,10 @@ export default function ProfilePage({
                     <p className="text-secondary-green mb-4">
                         {error || 'Profile not found'}
                     </p>
-                    <Link href="/" className="text-teal hover:text-burnt-orange transition-colors font-semibold">
+                    <Link
+                        href="/"
+                        className="text-teal hover:text-burnt-orange transition-colors font-semibold"
+                    >
                         Back to home
                     </Link>
                 </div>
@@ -47,15 +50,19 @@ export default function ProfilePage({
     }
 
     return (
-        <div className="min-h-screen bg-cream">
-            <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
-                <ProfileView
-                    profile={profile}
-                    onEdit={() =>
-                        console.log('Edit clicked - TODO: implement edit mode')
-                    }
-                />
+        <ProtectedRoute>
+            <div className="min-h-screen bg-cream">
+                <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
+                    <ProfileView
+                        profile={profile}
+                        onEdit={() =>
+                            console.log(
+                                'Edit clicked - TODO: implement edit mode'
+                            )
+                        }
+                    />
+                </div>
             </div>
-        </div>
+        </ProtectedRoute>
     )
 }

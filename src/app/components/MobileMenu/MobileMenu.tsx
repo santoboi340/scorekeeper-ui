@@ -15,6 +15,7 @@ const defaultLinks: MobileMenuLink[] = [
 ]
 
 const MobileMenu = ({
+    user,
     links = defaultLinks,
     className = '',
     iconClassName = '',

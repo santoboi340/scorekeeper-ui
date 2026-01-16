@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from './components/Navbar/Navbar'
 import Footer from './components/Footer/Footer'
+import { AuthProvider } from './context/AuthContext'
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -20,20 +21,24 @@ export const metadata: Metadata = {
         'Your Sports, Your Community - Connect with fellow athletes, track your games, and build lasting friendships through the sports you love.',
 }
 
-export default function RootLayout({
+const RootLayout = ({
     children,
 }: Readonly<{
     children: React.ReactNode
-}>) {
+}>) => {
     return (
         <html lang="en">
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <Navbar />
-                <main className="min-h-screen">{children}</main>
-                <Footer />
+                <AuthProvider>
+                    <Navbar />
+                    <main className="min-h-screen">{children}</main>
+                    <Footer />
+                </AuthProvider>
             </body>
         </html>
     )
 }
+
+export default RootLayout

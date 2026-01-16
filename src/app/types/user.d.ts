@@ -3,6 +3,13 @@
 export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'pro'
 export type PlayStyle = 'aggressive' | 'defensive' | 'balanced' | 'strategic'
 
+export interface User {
+    id: string
+    email: string
+    firstname?: string
+    lastname?: string
+    role?: 'user' | 'admin'
+}
 export interface UserProfile {
     id: string
     email: string

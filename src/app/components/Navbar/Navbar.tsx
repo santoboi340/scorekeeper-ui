@@ -1,20 +1,12 @@
-'use client';
+'use client'
 
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { MobileView } from "./Views/MobileView";
-import { DesktopView } from "./Views/DesktopView";
+import { useIsMobile } from '@/hooks/useIsMobile'
+import { MobileView } from './Views/MobileView'
+import { DesktopView } from './Views/DesktopView'
 
 const Navbar = () => {
-  const isMobile = useIsMobile();
+    const isMobile = useIsMobile()
+    return isMobile ? <MobileView /> : <DesktopView />
+}
 
-  return (
-    isMobile ? (
-      <MobileView />
-    ) : (
-      <DesktopView />
-    )
-
-  );
-};
-
-export default Navbar;
+export default Navbar
