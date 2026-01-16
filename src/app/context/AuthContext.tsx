@@ -8,7 +8,6 @@ import {
     useState,
     ReactNode,
 } from 'react'
-import { useRouter } from 'next/navigation'
 import { jwtDecode } from 'jwt-decode'
 
 interface User {
@@ -51,7 +50,6 @@ function getStoredToken(): string | null {
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
-    const router = useRouter()
 
     useEffect(() => {
         const verifyAuth = () => {
@@ -125,7 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         sessionStorage.removeItem('access_token')
         localStorage.removeItem('remembered_email')
         setUser(null)
-        router.push('/login')
+        window.location.href = '/'
     }
 
     return (

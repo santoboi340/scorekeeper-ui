@@ -2,6 +2,7 @@ type DesktopMenuLink = {
     label: string
     href: string
     onClick?: () => void
+    protected?: boolean
 }
 
 type DesktopMenuProps = {

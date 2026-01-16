@@ -20,7 +20,7 @@ const Home = () => {
                     {/* CTA Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                         <Link
-                            href="/signup"
+                            href="/register"
                             className="w-full sm:w-auto bg-pickleball-yellow text-primary-green px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gold transition-colors shadow-lg"
                         >
                             Get Started Free
@@ -128,7 +128,7 @@ const Home = () => {
                         competing, and having fun together.
                     </p>
                     <Link
-                        href="/signup"
+                        href="/register"
                         className="inline-block bg-pickleball-yellow text-primary-green px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gold transition-colors shadow-lg"
                     >
                         Create Free Account

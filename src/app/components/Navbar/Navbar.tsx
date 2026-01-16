@@ -6,6 +6,7 @@ import { DesktopView } from './Views/DesktopView'
 
 const Navbar = () => {
     const isMobile = useIsMobile()
+
     return isMobile ? <MobileView /> : <DesktopView />
 }
 

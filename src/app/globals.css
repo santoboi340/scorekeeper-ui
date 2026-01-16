@@ -28,6 +28,15 @@
     --dark-card: #232a25;
     --dark-foreground: #f4efe5;
     --dark-text-secondary: #c9d2c6;
+
+    /*Auth Stuff*/
+    --accent-auth: #10b981;
+    --accent-user: #3b82f6;
+    --accent-gateway: #f59e0b;
+    --accent-match: #8b5cf6;
+    --status-success: #10b981;
+    --status-error: #ef4444;
+    --hover-bg: #1b3527;
 }
 
 @theme inline {

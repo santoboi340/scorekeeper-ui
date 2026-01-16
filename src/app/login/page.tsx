@@ -2,79 +2,20 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { FaGoogle, FaGithub } from 'react-icons/fa'
 import { Logo } from '../components/Logo'
-import type { LoginRequest, LoginResponse, AuthError } from '../types/auth'
-import { useAuth } from '../context/AuthContext'
+import { useLogin } from 'root/hooks/useLogin'
 
 export default function LoginPage() {
-    const { login } = useAuth()
-    const router = useRouter()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rememberMe, setRememberMe] = useState(false)
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [error, setError] = useState<string | null>(null)
 
-    const handleSubmit = async (e: React.SyntheticEvent) => {
+    const loginMutation = useLogin()
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setIsSubmitting(true)
-        setError(null)
-
-        const loginData: LoginRequest = { email, password }
-
-        try {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(loginData),
-            })
-
-            const data: LoginResponse | AuthError = await response.json()
-
-            if (!response.ok) {
-                // Handle error response
-                const errorData = data as AuthError
-                setError(
-                    errorData.message ||
-                        'Login failed. Please check your credentials.'
-                )
-                return
-            }
-
-            // Success! Store the token
-            const successData = data as LoginResponse
-            console.log(
-                'This is the incoming data from the server',
-                successData
-            )
-
-            // Store token based on "remember me"
-            if (rememberMe) {
-                localStorage.setItem('access_token', successData.access_token)
-            } else {
-                sessionStorage.setItem('access_token', successData.access_token)
-            }
-
-            // Optional: Store user email if remembered
-            if (rememberMe) {
-                localStorage.setItem('remembered_email', email)
-            }
-
-            console.log('Login successful:', successData.message)
-
-            await login(successData.access_token)
-            // Redirect to Home Page
-            router.push('/')
-        } catch (err) {
-            console.error('Login error:', err)
-            setError(
-                'Network error. Please check your connection and try again.'
-            )
-        } finally {
-            setIsSubmitting(false)
-        }
+        loginMutation.mutate({ email, password, rememberMe })
     }
 
     return (
@@ -98,9 +39,11 @@ export default function LoginPage() {
                         </h2>
 
                         {/* Error Message */}
-                        {error && (
+                        {loginMutation.error && (
                             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                                <p className="text-red-700 text-sm">{error}</p>
+                                <p className="text-red-700 text-sm">
+                                    {loginMutation.error.message}
+                                </p>
                             </div>
                         )}
 
@@ -120,12 +63,14 @@ export default function LoginPage() {
                                     value={email}
                                     onChange={(e) => {
                                         setEmail(e.target.value)
-                                        if (error) setError(null) // Clear error on input
+                                        if (loginMutation.error) {
+                                            loginMutation.reset() // Clear error on input
+                                        }
                                     }}
                                     className="w-full px-4 py-3 md:py-3.5 border text-secondary-green border-neutral rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     placeholder="you@example.com"
                                     required
-                                    disabled={isSubmitting}
+                                    disabled={loginMutation.isPending}
                                 />
                             </div>
 
@@ -143,12 +88,14 @@ export default function LoginPage() {
                                     value={password}
                                     onChange={(e) => {
                                         setPassword(e.target.value)
-                                        if (error) setError(null) // Clear error on input
+                                        if (loginMutation.error) {
+                                            loginMutation.reset() // Clear error on input
+                                        }
                                     }}
                                     className="w-full px-4 py-3 md:py-3.5 border border-neutral rounded-lg text-secondary-green focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     placeholder="••••••••"
                                     required
-                                    disabled={isSubmitting}
+                                    disabled={loginMutation.isPending}
                                 />
                             </div>
 
@@ -162,7 +109,7 @@ export default function LoginPage() {
                                         onChange={(e) =>
                                             setRememberMe(e.target.checked)
                                         }
-                                        disabled={isSubmitting}
+                                        disabled={loginMutation.isPending}
                                         className="w-4 h-4 text-teal border-neutral rounded focus:ring-teal disabled:opacity-50"
                                     />
                                     <label
@@ -183,10 +130,12 @@ export default function LoginPage() {
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                disabled={isSubmitting}
+                                disabled={loginMutation.isPending}
                                 className="w-full bg-pickleball-yellow text-primary-green py-3 md:py-3.5 rounded-lg font-semibold text-sm md:text-base hover:bg-gold focus:outline-none focus:ring-2 focus:ring-teal focus:ring-offset-2 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {isSubmitting ? 'Signing in...' : 'Sign In'}
+                                {loginMutation.isPending
+                                    ? 'Signing in...'
+                                    : 'Sign In'}
                             </button>
                         </form>
 
@@ -204,7 +153,7 @@ export default function LoginPage() {
                             <button
                                 type="button"
                                 onClick={() => console.log('Google login')}
-                                disabled={isSubmitting}
+                                disabled={loginMutation.isPending}
                                 className="w-full flex items-center justify-center gap-3 bg-white border-2 border-neutral text-secondary-green py-3 md:py-3.5 rounded-lg font-medium hover:bg-cream hover:border-secondary-green transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <FaGoogle className="text-lg text-red-500" />
@@ -216,7 +165,7 @@ export default function LoginPage() {
                             <button
                                 type="button"
                                 onClick={() => console.log('GitHub login')}
-                                disabled={isSubmitting}
+                                disabled={loginMutation.isPending}
                                 className="w-full flex items-center justify-center gap-3 bg-primary-green text-cream py-3 md:py-3.5 rounded-lg font-medium hover:bg-secondary-green transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <FaGithub className="text-lg" />
