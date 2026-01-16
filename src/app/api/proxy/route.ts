@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server'
 const BACKEND_BASE_URL = 'https://scorepal-dev.mts-lab.net'
 
 async function handleProxyRequest(request: Request, method: string) {
+    console.log('INCOMING REQUEST', request)
     try {
         let endpoint: string
         let requestBody: any = null
@@ -26,7 +27,6 @@ async function handleProxyRequest(request: Request, method: string) {
             const body = await request.json()
             endpoint = body.endpoint
             requestBody = body.body
-
             if (!endpoint) {
                 return NextResponse.json(
                     { message: 'Missing "endpoint" in request body' },
@@ -73,6 +73,7 @@ async function handleProxyRequest(request: Request, method: string) {
 
         // Get response text
         const text = await response.text()
+        console.log(`📄 Backend body:`, text)
 
         // Return error responses as-is
         if (!response.ok) {
@@ -84,6 +85,7 @@ async function handleProxyRequest(request: Request, method: string) {
             } catch {
                 errorData = { message: text || 'Backend error' }
             }
+            console.error(`❌ Backend error:`, errorData)
 
             return NextResponse.json(errorData, { status: response.status })
         }

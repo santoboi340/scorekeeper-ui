@@ -21,6 +21,7 @@ export interface ApiCallResponse {
 export function useApiCall() {
     return useMutation<ApiCallResponse, Error, ApiCallRequest>({
         mutationFn: async ({ method, url, params, body }) => {
+            console.log('incoming data', method, url, params, body)
             const startTime = Date.now()
 
             // Parse body if present
@@ -57,11 +58,22 @@ export function useApiCall() {
                 fetchUrl = `/api/proxy?endpoint=${encodeURIComponent(url)}`
             } else {
                 // For POST/PUT/PATCH, pass endpoint and body in request body
-                fetchOptions.body = JSON.stringify({
-                    endpoint: url,
-                    body: bodyData,
-                })
+                if (method === 'POST' || method === 'PUT') {
+                    fetchOptions.body = JSON.stringify({
+                        endpoint: url,
+                        body: bodyData,
+                    })
+                }
+
+                if (method === 'PATCH') {
+                    fetchOptions.body = JSON.stringify({
+                        endpoint: `${url}/${bodyData.attribute}/${bodyData.value}`,
+                    })
+                }
             }
+
+            console.log(fetchUrl)
+            console.log(fetchOptions)
 
             const res = await fetch(fetchUrl, fetchOptions)
 

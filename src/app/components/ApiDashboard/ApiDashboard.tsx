@@ -374,7 +374,7 @@ const ENDPOINTS = {
             id: 'update-user-attribute',
             method: 'PATCH',
             name: 'Update User Attribute',
-            path: '/api/v1/user/update/{attribute}/{value}',
+            path: '/api/v1/user/update',
             body: '{\n  "attribute": "",\n  "value": ""\n}',
         },
         {
