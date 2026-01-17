@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useCreateScore } from 'root/hooks/useDashboard'
+import { useCreateScore } from 'root/hooks/useDashboardApis'
 
 export default function ScoreForm() {
     const [game, setGame] = useState('')

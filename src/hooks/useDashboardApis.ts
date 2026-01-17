@@ -18,7 +18,7 @@ export interface ApiCallResponse {
     headers: Record<string, string>
 }
 
-export function useApiCall() {
+export const useDashboardApis = () => {
     return useMutation<ApiCallResponse, Error, ApiCallRequest>({
         mutationFn: async ({ method, url, params, body }) => {
             console.log('incoming data', method, url, params, body)
