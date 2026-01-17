@@ -6,7 +6,7 @@ export async function POST(request: Request) {
         const body = await request.json()
 
         const response = await fetch(
-            'https://scorepal-dev.mts-lab.net//api/v1/auth/authenticate',
+            'https://scorepal-dev.mts-lab.net/api/v1/auth/authenticate',
             {
                 method: 'POST',
                 headers: {

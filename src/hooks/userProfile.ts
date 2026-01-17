@@ -1,50 +1,32 @@
-// hooks/useProfile.ts
+// src/hooks/useProfile.ts
+import { useQuery } from '@tanstack/react-query'
+import type { UserProfile } from '@/types/user'
 
-import { useState, useEffect } from 'react'
-import { UserProfile } from '../app/types/user'
-import {
-    getMockUserByUsername,
-    simulateApiDelay,
-} from '../app/lib/mockUserData'
+const useProfile = (username: string) => {
+    return useQuery({
+        // 1. queryKey: Unique identifier for this data
+        queryKey: ['profile', username],
 
-interface UseProfileResult {
-    profile: UserProfile | null
-    isLoading: boolean
-    error: string | null
-}
+        // 2. queryFn: Function that fetches the data
+        queryFn: async () => {
+            const token = localStorage.getItem('access_token')
 
-export function useProfile(username: string): UseProfileResult {
-    const [profile, setProfile] = useState<UserProfile | null>(null)
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState<string | null>(null)
-
-    useEffect(() => {
-        async function fetchProfile() {
-            try {
-                setIsLoading(true)
-                setError(null)
-
-                // Simulate network delay
-                await simulateApiDelay(800)
-
-                const user = getMockUserByUsername(username)
-
-                if (!user) {
-                    setError('User not found')
-                    setProfile(null)
-                } else {
-                    setProfile(user)
+            const response = await fetch(
+                `/api/proxy?endpoint=/user/username/${username}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 }
-            } catch (err) {
-                setError('Failed to load profile')
-                setProfile(null)
-            } finally {
-                setIsLoading(false)
+            )
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch profile')
             }
-        }
 
-        fetchProfile()
-    }, [username])
-
-    return { profile, isLoading, error }
+            return response.json() as Promise<UserProfile>
+        },
+    })
 }
+
+export { useProfile }

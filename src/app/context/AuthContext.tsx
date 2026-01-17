@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // contexts/AuthContext.tsx
 'use client'
 
@@ -12,6 +13,7 @@ import { jwtDecode } from 'jwt-decode'
 
 interface User {
     id: string
+    uuid?: string
     email: string
     firstname: string
     lastname: string
@@ -101,10 +103,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = (token: string) => {
         try {
-            const decoded = jwtDecode<JWTPayload>(token)
+            const decoded = jwtDecode<any>(token)
 
+            console.log('THIS IS THE DECODED JWT', decoded)
             const userData: User = {
                 id: decoded.sub || decoded.userId || 'unknown',
+                uuid: decoded.uuid,
                 email: decoded.email,
                 firstname: decoded.firstname,
                 lastname: decoded.lastname,

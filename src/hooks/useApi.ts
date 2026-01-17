@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// src/hooks/useApi.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { apiCall, ApiError } from '@/lib/api'
 

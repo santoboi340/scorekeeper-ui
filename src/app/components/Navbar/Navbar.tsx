@@ -1,6 +1,6 @@
 'use client'
 
-import { useIsMobile } from '@/hooks/useIsMobile'
+import { useIsMobile } from 'root/hooks/useIsMobile'
 import { MobileView } from './Views/MobileView'
 import { DesktopView } from './Views/DesktopView'
 

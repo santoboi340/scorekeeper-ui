@@ -10,38 +10,36 @@ export interface User {
     lastname?: string
     role?: 'user' | 'admin'
 }
-export interface UserProfile {
-    id: string
-    email: string
 
-    // Basic Info
+// src/types/user.ts
+export interface UserProfile {
+    // Basic info
+    id: string
+    username: string
     displayName: string
+    email: string
     avatar?: string
     bio?: string
-    location?: string // City/State only, not precise coords
+    location?: string
 
-    // Pickleball Specific
-    skillLevel: SkillLevel
-    playStyle?: PlayStyle
+    // Pickleball info
+    skillLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert'
+    playStyle?: string
     yearsPlaying?: number
-    preferredHand?: 'left' | 'right' | 'ambidextrous'
+    preferredHand?: 'left' | 'right'
 
-    // Stats (read-only, calculated from match history)
+    // Stats
     matchesPlayed: number
     winRate?: number
     currentRating?: number
 
-    // Privacy Controls
+    // Privacy settings
     privacy: {
         showLocation: 'public' | 'friends' | 'private'
         showStats: 'public' | 'friends' | 'private'
-        showMatchHistory: 'public' | 'friends' | 'private'
-        allowMatchRequests: boolean
     }
 
-    // Timestamps
     createdAt: string
-    updatedAt: string
 }
 
 export interface UserProfileUpdate {

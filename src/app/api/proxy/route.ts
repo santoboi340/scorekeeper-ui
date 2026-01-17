@@ -6,6 +6,7 @@ const BACKEND_BASE_URL = 'https://scorepal-dev.mts-lab.net'
 
 async function handleProxyRequest(request: Request, method: string) {
     console.log('INCOMING REQUEST', request)
+
     try {
         let endpoint: string
         let requestBody: any = null
