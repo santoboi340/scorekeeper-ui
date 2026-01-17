@@ -14,11 +14,14 @@ export function useLogin() {
         LoginRequest & { rememberMe: boolean }
     >({
         mutationFn: async ({ email, password }) => {
-            const response = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            })
+            const response = await fetch(
+                'https://scorepal-dev.mts-lab.net/api/v1/auth/authenticate',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password }),
+                }
+            )
 
             const data = await response.json()
 
