@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRegister } from 'root/hooks/useRegisterApi'
+import { useRegisterApi } from 'root/hooks/useRegisterApi'
 import type { RegisterRequest } from '@/types/auth'
 
 export default function RegisterForm() {
@@ -29,7 +29,7 @@ export default function RegisterForm() {
         registerMutation.mutate(formData)
     }
 
-    const registerMutation = useRegister()
+    const registerMutation = useRegisterApi()
 
     const handleChange = (field: keyof RegisterRequest, value: string) => {
         setFormData((prev) => ({ ...prev, [field]: value }))

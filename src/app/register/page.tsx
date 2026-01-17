@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { FaGoogle, FaGithub } from 'react-icons/fa'
 import { Logo } from '../components/Logo'
-import { useRegister } from 'root/hooks/useRegisterApi'
+import { useRegisterApi } from 'root/hooks/useRegisterApi'
 import type { RegisterRequest } from '@/types/auth'
 
 export default function RegisterPage() {
@@ -17,7 +17,7 @@ export default function RegisterPage() {
     })
     const [confirmPassword, setConfirmPassword] = useState('')
 
-    const registerMutation = useRegister()
+    const registerMutation = useRegisterApi()
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()

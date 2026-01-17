@@ -3,9 +3,9 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import type { RegisterRequest, RegisterResponse, AuthError } from '@/types/auth'
 
-export const useRegister = () => {
+export const useRegisterApi = () => {
     const router = useRouter()
-    const { login: setAuthUser } = useAuth()
+    const { login } = useAuth()
 
     return useMutation<RegisterResponse, AuthError, RegisterRequest>({
         mutationFn: async (registerData) => {
@@ -37,7 +37,7 @@ export const useRegister = () => {
             localStorage.setItem('access_token', data.access_token)
 
             // Update auth context
-            setAuthUser(data.access_token)
+            login(data.access_token)
 
             // Redirect to home
             router.push('/')
