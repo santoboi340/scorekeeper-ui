@@ -3,37 +3,8 @@ import Link from 'next/link'
 import { FaUsers, FaTrophy, FaCalendarAlt, FaChartLine } from 'react-icons/fa'
 
 const Home = () => {
-    function getToken() {
-        if (typeof window === 'undefined') {
-            return null // We're on the server, no localStorage
-        }
-        return localStorage.getItem('access_token')
-    }
-
-    // Usage
-    const token = getToken()
-    const handleFetch = async () => {
-        const response = await fetch(
-            'https://scorepal-dev.mts-lab.net/api/v1/user/getinfo',
-            {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            }
-        )
-
-        const data = await response.json()
-        console.log(data)
-        return data
-    }
-
     return (
         <div className="min-h-screen flex flex-col bg-cream">
-            <button className="cursor-pointer" onClick={() => handleFetch()}>
-                FETCH
-            </button>
             {/* Hero Section */}
             <section className="flex-1 flex flex-col items-center justify-center px-4 py-16 md:py-24 text-center">
                 <div className="max-w-4xl mx-auto">
