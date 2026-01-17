@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// contexts/AuthContext.tsx
 'use client'
 
 import {
@@ -9,39 +8,22 @@ import {
     useState,
     ReactNode,
 } from 'react'
+import type { User, JWTPayload, AuthContextType } from './AuthContext.d'
 import { jwtDecode } from 'jwt-decode'
 
-interface User {
-    id: string
-    uuid?: string
-    email: string
-    firstname: string
-    lastname: string
-    role: string
-}
-
-interface JWTPayload {
-    sub?: string // Standard JWT "subject" claim (usually user ID)
-    userId?: string // Some APIs use this instead
-    email: string
-    firstname: string
-    lastname: string
-    role: string
-    exp: number // Expiration timestamp
-    iat: number // Issued at timestamp
-}
-
-interface AuthContextType {
-    user: User | null
-    isLoading: boolean
-    isAuthenticated: boolean
-    login: (token: string) => void
-    logout: () => void
-}
-
+/**
+ * Create the Initial Context.
+ * It should take the shape of the AuthContextType
+ */
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-function getStoredToken(): string | null {
+/**
+ * Helper Function in order to grab
+ * whatever token the user has stored in
+ * either local/session storage
+ * @returns string | null
+ */
+const getStoredToken = (): string | null => {
     if (typeof window === 'undefined') return null
     return (
         localStorage.getItem('access_token') ||
@@ -49,6 +31,15 @@ function getStoredToken(): string | null {
     )
 }
 
+/**
+ * Create the Auth Provider.
+ * This is the Container that wraps
+ * the entire application.
+ * This will enable the Context Functions
+ * to be used anywhere within the app.
+ * @param ReactNode
+ * @returns <AuthContextProvider />
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
@@ -59,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
             if (!token) {
                 setIsLoading(false)
+                console.log('No Token Available in Session or Local Storage')
                 return
             }
 
@@ -81,10 +73,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 // Extract user from token
                 const userData: User = {
                     id: decoded.sub || decoded.userId || 'unknown',
+                    uuid: decoded.uuid,
                     email: decoded.email,
-                    firstname: decoded.firstname,
-                    lastname: decoded.lastname,
-                    role: decoded.role,
                 }
 
                 console.log('✅ User authenticated from token:', userData)
@@ -103,16 +93,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = (token: string) => {
         try {
-            const decoded = jwtDecode<any>(token)
-
-            console.log('THIS IS THE DECODED JWT', decoded)
+            const decoded = jwtDecode<JWTPayload>(token)
             const userData: User = {
                 id: decoded.sub || decoded.userId || 'unknown',
                 uuid: decoded.uuid,
                 email: decoded.email,
-                firstname: decoded.firstname,
-                lastname: decoded.lastname,
-                role: decoded.role,
             }
 
             console.log('✅ User loaded from token:', userData)
