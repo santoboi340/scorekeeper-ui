@@ -77,9 +77,9 @@ export const useDashboardApis = () => {
             }
 
             if (method === 'PATCH') {
-                fetchOptions.body = JSON.stringify({
-                    endpoint: `${url}/${bodyData.attribute}/${bodyData.value}`,
-                })
+                // PATCH requests use path parameters for this endpoint
+                // URL should already include /api/v1/user/update/{attribute}/{value}
+                // No body needed for this endpoint
             }
 
             console.log(fetchUrl)

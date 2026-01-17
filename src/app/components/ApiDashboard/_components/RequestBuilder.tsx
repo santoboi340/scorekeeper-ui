@@ -1,24 +1,45 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from 'root/app/context/AuthContext'
 
 const RequestBuilder = ({ selectedEndpoint, apiCall }: any) => {
     const [activeTab, setActiveTab] = useState('headers')
-    const [method, setMethod] = useState('POST')
-    const [url, setUrl] = useState('/api/v1/auth/authenticate')
+    const [method, setMethod] = useState(selectedEndpoint.method || 'POST')
+    const [url, setUrl] = useState(selectedEndpoint.path || '/api/v1/auth/authenticate')
     const [params, setParams] = useState<Array<{ key: string; value: string }>>(
         []
     )
-    const [body, setBody] = useState('{\n  "email": "",\n  "password": ""\n}')
+    const [body, setBody] = useState(selectedEndpoint.body || '{\n  "email": "",\n  "password": ""\n}')
+    const [pathParams, setPathParams] = useState<Record<string, string>>({})
+    const [prevEndpoint, setPrevEndpoint] = useState(selectedEndpoint)
+
+    // Extract path parameters from URL (e.g., {attribute}, {value})
+    const extractPathParams = (urlPath: string): string[] => {
+        const matches = urlPath.match(/\{([^}]+)\}/g)
+        return matches ? matches.map((m) => m.slice(1, -1)) : []
+    }
+
+    // Build the final URL with path parameters substituted
+    const buildFinalUrl = (): string => {
+        let finalUrl = url
+        Object.entries(pathParams).forEach(([key, value]) => {
+            finalUrl = finalUrl.replace(`{${key}}`, encodeURIComponent(value))
+        })
+        return finalUrl
+    }
+
+    const pathParamKeys = extractPathParams(url)
 
     console.log(method, url, body, params)
-    // Update form when endpoint changes
-    useEffect(() => {
+    // Update form when endpoint changes (using state comparison pattern)
+    if (selectedEndpoint !== prevEndpoint) {
         setMethod(selectedEndpoint.method)
         setUrl(selectedEndpoint.path)
         setBody(selectedEndpoint.body)
-    }, [selectedEndpoint])
+        setPathParams({})
+        setPrevEndpoint(selectedEndpoint)
+    }
 
     const { user } = useAuth()
     const addParam = () => {
@@ -77,6 +98,32 @@ const RequestBuilder = ({ selectedEndpoint, apiCall }: any) => {
                     />
                 </div>
             </div>
+
+            {/* Path Parameters */}
+            {pathParamKeys.length > 0 && (
+                <div className="builder-section">
+                    <label className="section-label">Path Parameters</label>
+                    <div className="path-params-grid">
+                        {pathParamKeys.map((paramKey) => (
+                            <div key={paramKey} className="path-param-input-group">
+                                <label className="path-param-label">{`{${paramKey}}`}</label>
+                                <input
+                                    type="text"
+                                    className="param-input"
+                                    placeholder={`Enter ${paramKey}`}
+                                    value={pathParams[paramKey] || ''}
+                                    onChange={(e) =>
+                                        setPathParams((prev) => ({
+                                            ...prev,
+                                            [paramKey]: e.target.value,
+                                        }))
+                                    }
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Tabs */}
             <div className="tabs">
@@ -177,7 +224,7 @@ const RequestBuilder = ({ selectedEndpoint, apiCall }: any) => {
             {/* Send Button */}
             <button
                 className="btn-send"
-                onClick={() => apiCall.mutate({ method, url, params, body })}
+                onClick={() => apiCall.mutate({ method, url: buildFinalUrl(), params, body })}
                 disabled={apiCall.isPending}
             >
                 {apiCall.isPending ? 'Sending...' : 'Send Request'}
