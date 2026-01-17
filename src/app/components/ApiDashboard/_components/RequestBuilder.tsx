@@ -2,9 +2,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useAuth } from 'root/app/context/AuthContext'
-import { useDashboardApis } from 'root/hooks/useDashboardApis'
 
-const RequestBuilder = ({ selectedEndpoint }: any) => {
+const RequestBuilder = ({ selectedEndpoint, apiCall }: any) => {
     const [activeTab, setActiveTab] = useState('headers')
     const [method, setMethod] = useState('POST')
     const [url, setUrl] = useState('/api/v1/auth/authenticate')
@@ -13,6 +12,7 @@ const RequestBuilder = ({ selectedEndpoint }: any) => {
     )
     const [body, setBody] = useState('{\n  "email": "",\n  "password": ""\n}')
 
+    console.log(method, url, body, params)
     // Update form when endpoint changes
     useEffect(() => {
         setMethod(selectedEndpoint.method)
@@ -21,7 +21,6 @@ const RequestBuilder = ({ selectedEndpoint }: any) => {
     }, [selectedEndpoint])
 
     const { user } = useAuth()
-    const apiCall = useDashboardApis()
     const addParam = () => {
         setParams([...params, { key: '', value: '' }])
     }
@@ -38,10 +37,6 @@ const RequestBuilder = ({ selectedEndpoint }: any) => {
 
     const removeParam = (index: number) => {
         setParams(params.filter((_, i) => i !== index))
-    }
-
-    const sendRequest = () => {
-        apiCall.mutate({ method, url, params, body })
     }
 
     return (
@@ -182,7 +177,7 @@ const RequestBuilder = ({ selectedEndpoint }: any) => {
             {/* Send Button */}
             <button
                 className="btn-send"
-                onClick={sendRequest}
+                onClick={() => apiCall.mutate({ method, url, params, body })}
                 disabled={apiCall.isPending}
             >
                 {apiCall.isPending ? 'Sending...' : 'Send Request'}

@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useDashboardApis } from 'root/hooks/useDashboardApis'
 
-const ResponseViewer = () => {
-    const apiCall = useDashboardApis()
+const ResponseViewer = ({ apiCall }: any) => {
     const formatJSON = (obj: any) => {
         return JSON.stringify(obj, null, 2)
     }

@@ -22,11 +22,15 @@ export const useDashboardApis = () => {
     return useMutation<ApiCallResponse, Error, ApiCallRequest>({
         mutationFn: async ({ method, url, params, body }) => {
             console.log('incoming data', method, url, params, body)
+            const baseUrl = 'https://scorepal-dev.mts-lab.net'
             const startTime = Date.now()
 
             // Parse body if present
             let bodyData = null
             if (body && ['POST', 'PUT', 'PATCH'].includes(method)) {
+                console.log(
+                    'The API Contains a Body, AND , is of method POST PUT OR PATCH'
+                )
                 try {
                     bodyData = JSON.parse(body)
                 } catch (e) {
@@ -42,9 +46,11 @@ export const useDashboardApis = () => {
                 throw new Error('No authentication token found')
             }
 
+            console.log('API CALL CHECKPOINT - Contains Token')
+            console.log('API CALL CHECKPOINT - satisfies method body reqs')
             console.log('📤 API Call:', { method, url, bodyData })
 
-            let fetchUrl = '/api/proxy'
+            let fetchUrl = url
             let fetchOptions: RequestInit = {
                 method, // ✅ Now matches the actual HTTP method
                 headers: {
@@ -53,29 +59,33 @@ export const useDashboardApis = () => {
                 },
             }
 
-            // For GET/DELETE, pass endpoint as query param
-            if (method === 'GET' || method === 'DELETE') {
-                fetchUrl = `/api/proxy?endpoint=${encodeURIComponent(url)}`
-            } else {
-                // For POST/PUT/PATCH, pass endpoint and body in request body
-                if (method === 'POST' || method === 'PUT') {
-                    fetchOptions.body = JSON.stringify({
-                        endpoint: url,
-                        body: bodyData,
-                    })
-                }
+            // // For GET/DELETE, pass endpoint as query param
+            // if (method === 'GET' || method === 'DELETE') {
+            //     console.log(' API CALL CHECKPOINT - REQUEST WAS GET REQUEST')
+            //     fetchUrl = `/api/proxy?endpoint=${encodeURIComponent(url)}`
+            //     console.log(
+            //         ' API CALL CHECKPOINT - THIS IS THE GET URL',
+            //         fetchUrl
+            //     )
+            // }
+            // For POST/PUT/PATCH, pass endpoint and body in request body
+            if (method === 'POST' || method === 'PUT') {
+                fetchOptions.body = JSON.stringify({
+                    endpoint: url,
+                    body: bodyData,
+                })
+            }
 
-                if (method === 'PATCH') {
-                    fetchOptions.body = JSON.stringify({
-                        endpoint: `${url}/${bodyData.attribute}/${bodyData.value}`,
-                    })
-                }
+            if (method === 'PATCH') {
+                fetchOptions.body = JSON.stringify({
+                    endpoint: `${url}/${bodyData.attribute}/${bodyData.value}`,
+                })
             }
 
             console.log(fetchUrl)
             console.log(fetchOptions)
 
-            const res = await fetch(fetchUrl, fetchOptions)
+            const res = await fetch(`${baseUrl}${fetchUrl}`, fetchOptions)
 
             const responseTime = Date.now() - startTime
 
