@@ -1,12 +1,9 @@
-// src/hooks/useAuth.ts (add this to your existing file)
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import type { RegisterRequest, RegisterResponse, AuthError } from '@/types/auth'
 
-// ... existing useLogin hook ...
-
-export function useRegister() {
+export const useRegister = () => {
     const router = useRouter()
     const { login: setAuthUser } = useAuth()
 

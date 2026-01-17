@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRegister } from 'root/hooks/useRegister'
+import { useRegister } from 'root/hooks/useRegisterApi'
 import type { RegisterRequest } from '@/types/auth'
 
 export default function RegisterForm() {

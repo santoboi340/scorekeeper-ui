@@ -1,12 +1,11 @@
-// src/hooks/useAuth.ts
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import type { LoginRequest, LoginResponse, AuthError } from '@/types/auth'
 
-export function useLogin() {
+export const useLoginApi = () => {
     const router = useRouter()
-    const { login: setAuthUser } = useAuth()
+    const { login } = useAuth()
 
     return useMutation<
         LoginResponse,
@@ -49,7 +48,7 @@ export function useLogin() {
             console.log('Login successful:', data.message)
 
             // Update auth context
-            setAuthUser(data.access_token)
+            login(data.access_token)
 
             // Redirect to home
             router.push('/')

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { LogoProps } from './Logo.d'
-import { useIsMobile } from 'root/hooks/useIsMobile'
+import { useIsMobile } from 'root/hooks/useIsMobileView'
 
 const Logo = ({ imageUrl, alt = 'Logo', href = '/' }: LogoProps) => {
     const isMobile = useIsMobile()

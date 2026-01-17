@@ -4,14 +4,14 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { FaGoogle, FaGithub } from 'react-icons/fa'
 import { Logo } from '../components/Logo'
-import { useLogin } from 'root/hooks/useLogin'
+import { useLoginApi } from 'root/hooks/useLoginApi'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rememberMe, setRememberMe] = useState(false)
 
-    const loginMutation = useLogin()
+    const loginMutation = useLoginApi()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

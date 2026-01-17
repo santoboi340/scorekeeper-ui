@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { FaGoogle, FaGithub } from 'react-icons/fa'
 import { Logo } from '../components/Logo'
-import { useRegister } from 'root/hooks/useRegister'
+import { useRegister } from 'root/hooks/useRegisterApi'
 import type { RegisterRequest } from '@/types/auth'
 
 export default function RegisterPage() {
@@ -64,13 +64,14 @@ export default function RegisterPage() {
                         </h2>
 
                         {/* General Error Message */}
-                        {registerMutation.error && !registerMutation.error.errors && (
-                            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                                <p className="text-red-700 text-sm">
-                                    {registerMutation.error.message}
-                                </p>
-                            </div>
-                        )}
+                        {registerMutation.error &&
+                            !registerMutation.error.errors && (
+                                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                    <p className="text-red-700 text-sm">
+                                        {registerMutation.error.message}
+                                    </p>
+                                </div>
+                            )}
 
                         {/* Registration Form */}
                         <form onSubmit={handleSubmit} className="space-y-4">
@@ -88,7 +89,12 @@ export default function RegisterPage() {
                                         type="text"
                                         id="firstName"
                                         value={formData.firstName}
-                                        onChange={(e) => handleChange('firstName', e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'firstName',
+                                                e.target.value
+                                            )
+                                        }
                                         className="w-full px-4 py-3 md:py-3.5 border text-secondary-green border-neutral rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                         placeholder="John"
                                         required
@@ -113,7 +119,12 @@ export default function RegisterPage() {
                                         type="text"
                                         id="lastName"
                                         value={formData.lastName}
-                                        onChange={(e) => handleChange('lastName', e.target.value)}
+                                        onChange={(e) =>
+                                            handleChange(
+                                                'lastName',
+                                                e.target.value
+                                            )
+                                        }
                                         className="w-full px-4 py-3 md:py-3.5 border text-secondary-green border-neutral rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                         placeholder="Doe"
                                         required
@@ -139,7 +150,9 @@ export default function RegisterPage() {
                                     type="email"
                                     id="email"
                                     value={formData.email}
-                                    onChange={(e) => handleChange('email', e.target.value)}
+                                    onChange={(e) =>
+                                        handleChange('email', e.target.value)
+                                    }
                                     className="w-full px-4 py-3 md:py-3.5 border text-secondary-green border-neutral rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     placeholder="you@example.com"
                                     required
@@ -164,7 +177,9 @@ export default function RegisterPage() {
                                     type="password"
                                     id="password"
                                     value={formData.password}
-                                    onChange={(e) => handleChange('password', e.target.value)}
+                                    onChange={(e) =>
+                                        handleChange('password', e.target.value)
+                                    }
                                     className="w-full px-4 py-3 md:py-3.5 border text-secondary-green border-neutral rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     placeholder="••••••••"
                                     required
@@ -190,7 +205,9 @@ export default function RegisterPage() {
                                     type="password"
                                     id="confirmPassword"
                                     value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    onChange={(e) =>
+                                        setConfirmPassword(e.target.value)
+                                    }
                                     className="w-full px-4 py-3 md:py-3.5 border text-secondary-green border-neutral rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     placeholder="••••••••"
                                     required
