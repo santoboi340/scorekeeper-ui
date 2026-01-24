@@ -6,6 +6,8 @@ import {
     UserProfileUpdate,
     SkillLevel,
     PlayStyle,
+    Handedness,
+    PrivacyType,
 } from '../../types/user'
 
 interface ProfileEditProps {
@@ -23,8 +25,8 @@ export default function ProfileEdit({
         displayName: profile.displayName,
         bio: profile.bio || '',
         location: profile.location || '',
-        skillLevel: profile.skillLevel,
-        playStyle: profile.playStyle,
+        skillLevel: profile.skillLevel || 'advanced',
+        playStyle: profile.playStyle || 'aggressive',
         yearsPlaying: profile.yearsPlaying,
         preferredHand: profile.preferredHand,
         privacy: profile.privacy,
@@ -184,7 +186,8 @@ export default function ProfileEdit({
                     onChange={(e) =>
                         setFormData({
                             ...formData,
-                            preferredHand: (e.target.value as any) || undefined,
+                            preferredHand:
+                                (e.target.value as Handedness) || undefined,
                         })
                     }
                     className="w-full px-3 py-2 border rounded-md"
@@ -215,7 +218,8 @@ export default function ProfileEdit({
                                     ...formData,
                                     privacy: {
                                         ...formData.privacy!,
-                                        showLocation: e.target.value as any,
+                                        showLocation: e.target
+                                            .value as PrivacyType,
                                     },
                                 })
                             }
@@ -241,7 +245,8 @@ export default function ProfileEdit({
                                     ...formData,
                                     privacy: {
                                         ...formData.privacy!,
-                                        showStats: e.target.value as any,
+                                        showStats: e.target
+                                            .value as PrivacyType,
                                     },
                                 })
                             }

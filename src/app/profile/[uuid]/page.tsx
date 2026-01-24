@@ -3,9 +3,9 @@
 'use client'
 
 import { useProfile } from '../../../hooks/userProfile'
-import ProfileView from '../../components/Profile/ProfileView'
+import ProfileView from 'root/components/Profile/ProfileView'
 import Link from 'next/link'
-import { ProtectedRoute } from '@/components/ProtectedRoute.tsx/ProtectedRoute'
+import { ProtectedRoute } from 'root/components/ProtectedRoute.tsx/ProtectedRoute'
 import { useParams } from 'next/navigation'
 
 export default function ProfilePage() {

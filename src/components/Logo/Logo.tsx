@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { LogoProps } from './Logo'
+import { LogoProps } from './Logo.d'
 import { useIsMobile } from 'root/hooks/useIsMobileView'
 
 const Logo = ({ imageUrl, alt = 'Logo', href = '/' }: LogoProps) => {

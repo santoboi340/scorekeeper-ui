@@ -1,8 +1,20 @@
 // types/user.ts
 
-export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'pro'
-export type PlayStyle = 'aggressive' | 'defensive' | 'balanced' | 'strategic'
+export type SkillLevel =
+    | 'beginner'
+    | 'intermediate'
+    | 'advanced'
+    | 'pro'
+    | undefined
+export type PlayStyle =
+    | 'aggressive'
+    | 'defensive'
+    | 'balanced'
+    | 'strategic'
+    | undefined
 
+export type Handedness = 'left' | 'right' | 'ambidextrous'
+export type PrivacyType = 'public' | 'friends' | 'private'
 export interface User {
     id: string
     email: string
@@ -23,10 +35,10 @@ export interface UserProfile {
     location?: string
 
     // Pickleball info
-    skillLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert'
-    playStyle?: string
+    skillLevel: SkillLevel
+    playStyle?: PlayStyle
     yearsPlaying?: number
-    preferredHand?: 'left' | 'right'
+    preferredHand?: Handedness
 
     // Stats
     matchesPlayed: number
@@ -35,8 +47,9 @@ export interface UserProfile {
 
     // Privacy settings
     privacy: {
-        showLocation: 'public' | 'friends' | 'private'
-        showStats: 'public' | 'friends' | 'private'
+        allowMatchRequests: boolean
+        showLocation: PrivacyType
+        showStats: PrivacyType
     }
 
     createdAt: string
@@ -50,6 +63,6 @@ export interface UserProfileUpdate {
     skillLevel?: SkillLevel
     playStyle?: PlayStyle
     yearsPlaying?: number
-    preferredHand?: 'left' | 'right' | 'ambidextrous'
+    preferredHand?: Handedness
     privacy?: Partial<UserProfile['privacy']>
 }

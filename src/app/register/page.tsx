@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { FaGoogle, FaGithub } from 'react-icons/fa'
-import { Logo } from '../components/Logo'
+import { Logo } from 'root/components/Logo'
 import { useRegisterApi } from 'root/hooks/useRegisterApi'
 import type { RegisterRequest } from 'root/types/auth'
 

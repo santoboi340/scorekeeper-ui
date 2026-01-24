@@ -3,12 +3,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useSettings } from '@/hooks/useSettings'
-import PrivacySettings from '../../../components/Settings/PrivacySettings'
-import NotificationSettings from '../../../components/Settings/NotificationSettings'
-import PreferencesSettings from '../../../components/Settings/PreferencesSettings'
-import AccountSettings from '../../../components/Settings/AccountSettings'
-import DangerZone from '../../../components/Settings/DangerZone'
+import { useSettings } from 'root/hooks/useSettings'
+import PrivacySettings from 'root/components/Settings/PrivacySettings'
+import NotificationSettings from 'root/components/Settings/NotificationSettings'
+import PreferencesSettings from 'root/components/Settings/PreferencesSettings'
+import AccountSettings from 'root/components/Settings/AccountSettings'
+import DangerZone from 'root/components/Settings/DangerZone'
 import Link from 'next/link'
 
 type SettingsTab =

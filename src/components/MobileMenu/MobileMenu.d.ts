@@ -1,4 +1,4 @@
-import { User } from '@/app/types/user'
+import type { User } from '../../types/user.d'
 
 type MobileMenuLink = {
     label: string
