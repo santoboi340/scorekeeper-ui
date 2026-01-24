@@ -8,7 +8,7 @@ interface ProfileViewProps {
 }
 
 export default function ProfileView({ profile, onEdit }: ProfileViewProps) {
-    const token = sessionStorage.getItem('access_token')
+    const token = sessionStorage.getItem('access_token') || ''
     const payload = JSON.parse(atob(token.split('.')[1]))
     console.log(payload)
     console.log('The Above Console log is located in ProfileView.tsx')
