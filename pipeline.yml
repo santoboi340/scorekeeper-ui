@@ -11,10 +11,6 @@ artifacts:
   - 'imageRef.properties'
   - 'pipeline.properties'
 
-custom:  
-  post_build_commands:
-    - 'env | sort'
-    - "tar -czf scorepal-ui-svc-$JOB_BASE_NAME-$BUILD_NUMBER.archive.tar.gz out/"
 
 
 spinnaker_app: scorepal-ui-svc
