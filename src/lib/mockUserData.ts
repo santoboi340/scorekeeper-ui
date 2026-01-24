@@ -25,7 +25,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
         },
         createdAt: '2024-01-15T10:30:00Z',
         updatedAt: '2025-01-08T14:22:00Z',
-    },
+    } as any,
 
     'mike-rodriguez': {
         id: '2',
@@ -49,7 +49,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
         },
         createdAt: '2023-06-10T08:15:00Z',
         updatedAt: '2025-01-09T16:45:00Z',
-    },
+    } as any,
 
     'alex-kim': {
         id: '3',
@@ -73,7 +73,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
         },
         createdAt: '2024-09-20T12:00:00Z',
         updatedAt: '2025-01-07T11:30:00Z',
-    },
+    }as any,
 
     'jessica-taylor': {
         id: '4',
@@ -96,7 +96,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
         },
         createdAt: '2022-03-05T09:20:00Z',
         updatedAt: '2025-01-10T07:15:00Z',
-    },
+    } as any,
 
     'chris-patel': {
         id: '5',
@@ -115,7 +115,7 @@ export const MOCK_USERS: Record<string, UserProfile> = {
         },
         createdAt: '2023-11-12T14:40:00Z',
         updatedAt: '2025-01-05T19:00:00Z',
-    },
+    } as any,
 }
 
 // Helper to get user by username
