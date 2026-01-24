@@ -3,7 +3,7 @@
 
 import { useState } from 'react'
 import { useRegisterApi } from 'root/hooks/useRegisterApi'
-import type { RegisterRequest } from '@/types/auth'
+import type { RegisterRequest } from 'root/types/auth'
 
 export default function RegisterForm() {
     const [formData, setFormData] = useState<RegisterRequest>({

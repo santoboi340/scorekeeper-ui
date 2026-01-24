@@ -1,16 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 import { useState } from 'react'
-import { useAuth } from 'root/app/context/AuthContext'
+import { useAuth } from 'root/context/AuthContext'
 
 const RequestBuilder = ({ selectedEndpoint, apiCall }: any) => {
     const [activeTab, setActiveTab] = useState('headers')
     const [method, setMethod] = useState(selectedEndpoint.method || 'POST')
-    const [url, setUrl] = useState(selectedEndpoint.path || '/api/v1/auth/authenticate')
+    const [url, setUrl] = useState(
+        selectedEndpoint.path || '/api/v1/auth/authenticate'
+    )
     const [params, setParams] = useState<Array<{ key: string; value: string }>>(
         []
     )
-    const [body, setBody] = useState(selectedEndpoint.body || '{\n  "email": "",\n  "password": ""\n}')
+    const [body, setBody] = useState(
+        selectedEndpoint.body || '{\n  "email": "",\n  "password": ""\n}'
+    )
     const [pathParams, setPathParams] = useState<Record<string, string>>({})
     const [prevEndpoint, setPrevEndpoint] = useState(selectedEndpoint)
 
@@ -105,7 +109,10 @@ const RequestBuilder = ({ selectedEndpoint, apiCall }: any) => {
                     <label className="section-label">Path Parameters</label>
                     <div className="path-params-grid">
                         {pathParamKeys.map((paramKey) => (
-                            <div key={paramKey} className="path-param-input-group">
+                            <div
+                                key={paramKey}
+                                className="path-param-input-group"
+                            >
                                 <label className="path-param-label">{`{${paramKey}}`}</label>
                                 <input
                                     type="text"
@@ -224,7 +231,14 @@ const RequestBuilder = ({ selectedEndpoint, apiCall }: any) => {
             {/* Send Button */}
             <button
                 className="btn-send"
-                onClick={() => apiCall.mutate({ method, url: buildFinalUrl(), params, body })}
+                onClick={() =>
+                    apiCall.mutate({
+                        method,
+                        url: buildFinalUrl(),
+                        params,
+                        body,
+                    })
+                }
                 disabled={apiCall.isPending}
             >
                 {apiCall.isPending ? 'Sending...' : 'Send Request'}

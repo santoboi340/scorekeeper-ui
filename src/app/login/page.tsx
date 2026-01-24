@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { FaGoogle, FaGithub } from 'react-icons/fa'
-import { Logo } from '../components/Logo'
+import { Logo } from 'root/components/Logo'
 import { useLoginApi } from 'root/hooks/useLoginApi'
 
 export default function LoginPage() {

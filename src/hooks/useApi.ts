@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { apiCall, ApiError } from '@/lib/api'
+import { apiCall, ApiError } from 'root/lib/api'
 
 // Generic GET hook
 export function useApiQuery<T = any>(

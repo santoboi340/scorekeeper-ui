@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/context/AuthContext'
-import type { LoginRequest, LoginResponse, AuthError } from '@/types/auth'
+import { useAuth } from 'root/context/AuthContext'
+import type { LoginRequest, LoginResponse, AuthError } from 'root/types/auth'
 
 export const useLoginApi = () => {
     const router = useRouter()

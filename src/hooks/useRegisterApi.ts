@@ -1,7 +1,11 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import { useAuth } from '@/context/AuthContext'
-import type { RegisterRequest, RegisterResponse, AuthError } from '@/types/auth'
+import { useAuth } from 'root/utils/context/AuthContext'
+import type {
+    RegisterRequest,
+    RegisterResponse,
+    AuthError,
+} from 'root/types/auth'
 
 export const useRegisterApi = () => {
     const router = useRouter()

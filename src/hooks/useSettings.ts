@@ -1,9 +1,9 @@
 // hooks/useSettings.ts
 
 import { useState, useEffect } from 'react'
-import { UserSettings, SettingsUpdatePayload } from '../app/types/settings'
-import { getMockSettings } from '../app/lib/mockSettings'
-import { simulateApiDelay } from '../app/lib/mockUserData'
+import { UserSettings, SettingsUpdatePayload } from '../types/settings'
+import { getMockSettings } from '../lib/mockSettings'
+import { simulateApiDelay } from '../lib/mockUserData'
 interface UseSettingsResult {
     settings: UserSettings | null
     isLoading: boolean

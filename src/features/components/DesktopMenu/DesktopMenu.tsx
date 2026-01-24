@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { type DesktopMenuLink, DesktopMenuProps } from './DesktopMenu.d'
+import { type DesktopMenuLink, DesktopMenuProps } from './DesktopMenu'
 import { Logo } from '../Logo'
-import { useAuth } from '@/context/AuthContext'
+import { useAuth } from 'root/utils/context/AuthContext'
 import { useRouter } from 'next/navigation'
 
 const DesktopMenu = ({

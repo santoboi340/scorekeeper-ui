@@ -1,6 +1,6 @@
 // lib/mockData.ts (add to existing file)
 
-import { UserSettings } from '@/types/settings'
+import { UserSettings } from 'root/types/settings'
 
 export const MOCK_SETTINGS: Record<string, UserSettings> = {
     'sarah-chen': {
