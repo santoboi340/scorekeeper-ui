@@ -3,29 +3,29 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { FaGoogle, FaGithub } from 'react-icons/fa'
-import { Logo } from '../components/Logo'
+import { Logo } from 'root/components/Logo'
+import { useLoginApi } from 'root/hooks/useLoginApi'
+
 export default function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rememberMe, setRememberMe] = useState(false)
 
-    const handleSubmit = (e: React.SyntheticEvent) => {
+    const loginMutation = useLoginApi()
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        console.log('Login submitted:', { email, password, rememberMe })
+        loginMutation.mutate({ email, password, rememberMe })
     }
 
     return (
         <div className="min-h-screen bg-cream flex flex-col">
-            {/* Mobile-first container */}
             <div className="flex-1 flex items-center justify-center px-4 py-8 md:py-12">
                 <div className="w-full max-w-md">
                     {/* Brand/Logo */}
                     <div className="text-center mb-8">
                         <div className="justify-center flex">
-                            <Logo
-                                href="/"
-                                imageUrl="/Logos/Scorepal2.png"
-                            />
+                            <Logo href="/" imageUrl="/Logos/Scorepal2.png" />
                         </div>
                         <p className="text-secondary-green text-sm md:text-base">
                             Welcome back! Sign in to continue
@@ -37,6 +37,15 @@ export default function LoginPage() {
                         <h2 className="text-xl md:text-2xl font-bold text-primary-green mb-6">
                             Sign In
                         </h2>
+
+                        {/* Error Message */}
+                        {loginMutation.error && (
+                            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                <p className="text-red-700 text-sm">
+                                    {loginMutation.error.message}
+                                </p>
+                            </div>
+                        )}
 
                         {/* Email/Password Form */}
                         <form onSubmit={handleSubmit} className="space-y-4">
@@ -52,10 +61,16 @@ export default function LoginPage() {
                                     type="email"
                                     id="email"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full px-4 py-3 md:py-3.5 border text-secondary-green border-neutral rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all"
+                                    onChange={(e) => {
+                                        setEmail(e.target.value)
+                                        if (loginMutation.error) {
+                                            loginMutation.reset() // Clear error on input
+                                        }
+                                    }}
+                                    className="w-full px-4 py-3 md:py-3.5 border text-secondary-green border-neutral rounded-lg focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     placeholder="you@example.com"
                                     required
+                                    disabled={loginMutation.isPending}
                                 />
                             </div>
 
@@ -71,12 +86,16 @@ export default function LoginPage() {
                                     type="password"
                                     id="password"
                                     value={password}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                         setPassword(e.target.value)
-                                    }
-                                    className="w-full px-4 py-3 md:py-3.5 border border-neutral rounded-lg  text-secondary-green focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all"
+                                        if (loginMutation.error) {
+                                            loginMutation.reset() // Clear error on input
+                                        }
+                                    }}
+                                    className="w-full px-4 py-3 md:py-3.5 border border-neutral rounded-lg text-secondary-green focus:outline-none focus:ring-2 focus:ring-teal focus:border-transparent text-sm md:text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                     placeholder="••••••••"
                                     required
+                                    disabled={loginMutation.isPending}
                                 />
                             </div>
 
@@ -90,7 +109,8 @@ export default function LoginPage() {
                                         onChange={(e) =>
                                             setRememberMe(e.target.checked)
                                         }
-                                        className="w-4 h-4 text-teal border-neutral rounded focus:ring-teal"
+                                        disabled={loginMutation.isPending}
+                                        className="w-4 h-4 text-teal border-neutral rounded focus:ring-teal disabled:opacity-50"
                                     />
                                     <label
                                         htmlFor="remember"
@@ -110,11 +130,15 @@ export default function LoginPage() {
                             {/* Submit Button */}
                             <button
                                 type="submit"
-                                className="w-full bg-pickleball-yellow text-primary-green py-3 md:py-3.5 rounded-lg font-semibold text-sm md:text-base hover:bg-gold focus:outline-none focus:ring-2 focus:ring-teal focus:ring-offset-2 transition-colors shadow-sm"
+                                disabled={loginMutation.isPending}
+                                className="w-full bg-pickleball-yellow text-primary-green py-3 md:py-3.5 rounded-lg font-semibold text-sm md:text-base hover:bg-gold focus:outline-none focus:ring-2 focus:ring-teal focus:ring-offset-2 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                Sign In
+                                {loginMutation.isPending
+                                    ? 'Signing in...'
+                                    : 'Sign In'}
                             </button>
                         </form>
+
                         {/* Divider */}
                         <div className="my-6 flex items-center">
                             <div className="flex-1 border-t border-neutral"></div>
@@ -123,12 +147,14 @@ export default function LoginPage() {
                             </span>
                             <div className="flex-1 border-t border-neutral"></div>
                         </div>
+
                         {/* Social Login Buttons */}
                         <div className="space-y-3 mb-6">
                             <button
                                 type="button"
                                 onClick={() => console.log('Google login')}
-                                className="w-full flex items-center justify-center gap-3 bg-white border-2 border-neutral text-secondary-green py-3 md:py-3.5 rounded-lg font-medium hover:bg-cream hover:border-secondary-green transition-all"
+                                disabled={loginMutation.isPending}
+                                className="w-full flex items-center justify-center gap-3 bg-white border-2 border-neutral text-secondary-green py-3 md:py-3.5 rounded-lg font-medium hover:bg-cream hover:border-secondary-green transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <FaGoogle className="text-lg text-red-500" />
                                 <span className="text-sm md:text-base">
@@ -139,7 +165,8 @@ export default function LoginPage() {
                             <button
                                 type="button"
                                 onClick={() => console.log('GitHub login')}
-                                className="w-full flex items-center justify-center gap-3 bg-primary-green text-cream py-3 md:py-3.5 rounded-lg font-medium hover:bg-secondary-green transition-colors"
+                                disabled={loginMutation.isPending}
+                                className="w-full flex items-center justify-center gap-3 bg-primary-green text-cream py-3 md:py-3.5 rounded-lg font-medium hover:bg-secondary-green transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <FaGithub className="text-lg" />
                                 <span className="text-sm md:text-base">
@@ -152,10 +179,10 @@ export default function LoginPage() {
                         <p className="mt-6 text-center text-secondary-green text-sm">
                             Don&apos;t have an account?{' '}
                             <Link
-                                href="/signup"
+                                href="/register"
                                 className="text-teal font-semibold hover:text-secondary-green"
                             >
-                                Sign up
+                                Register
                             </Link>
                         </p>
                     </div>

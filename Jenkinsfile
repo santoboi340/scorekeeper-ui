@@ -1,6 +1,6 @@
 // @Library('https://github.com/MagusTechSolutions/mts-jenkins-lib.git') _
 
-library identifier: 'buildJava@master', 
+library identifier: 'buildPipeline@master', 
   retriever: modernSCM([
     $class: 'GitSCMSource',
     credentialsId: 'github-repo-token',
