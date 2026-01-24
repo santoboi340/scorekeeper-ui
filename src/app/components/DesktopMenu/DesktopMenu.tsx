@@ -4,25 +4,30 @@ import Link from 'next/link'
 import { type DesktopMenuLink, DesktopMenuProps } from './DesktopMenu.d'
 import { Logo } from '../Logo'
 import { useAuth } from '@/context/AuthContext'
-
-const defaultLinks: DesktopMenuLink[] = [
-    { label: 'Home', href: '/' },
-    { label: 'Features', href: '/' },
-    { label: 'About', href: '/' },
-    { label: 'Contact', href: '/' },
-    { label: 'Api Dashboard', href: '/api-dashboard', protected: true },
-]
+import { useRouter } from 'next/navigation'
 
 const DesktopMenu = ({
-    links = defaultLinks,
     className = '',
     linkClassName = '',
 }: DesktopMenuProps) => {
     const { user, isAuthenticated, logout } = useAuth()
+    const router = useRouter()
+    const defaultLinks: DesktopMenuLink[] = [
+        { label: 'Home', href: '/' },
+        { label: 'Features', href: '/' },
+        { label: 'About', href: '/' },
+        { label: 'Contact', href: '/' },
+        { label: 'Api Dashboard', href: '/api-dashboard', protected: true },
+        {
+            label: 'Profile',
+            href: `/profile/${user && user.uuid}`,
+            protected: true,
+        },
+    ]
 
     const handleLinkClick = (link: DesktopMenuLink) => {
-        if (link.onClick) {
-            link.onClick()
+        if (link.href) {
+            router.push(link.href)
         }
     }
 
@@ -34,7 +39,7 @@ const DesktopMenu = ({
 
                 {/* Navigation Links */}
                 <div className={styles.linksContainer}>
-                    {links.map((link, index) =>
+                    {defaultLinks.map((link, index) =>
                         !link.protected || isAuthenticated ? (
                             <Link
                                 key={index}

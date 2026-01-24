@@ -2,21 +2,17 @@
 
 'use client'
 
-import { use } from 'react'
 import { useProfile } from '../../../hooks/userProfile'
 import ProfileView from '../../components/Profile/ProfileView'
 import Link from 'next/link'
 import { ProtectedRoute } from '@/components/ProtectedRoute.tsx/ProtectedRoute'
+import { useParams } from 'next/navigation'
 
-export default function ProfilePage({
-    params,
-}: {
-    params: Promise<{ username: string }>
-}) {
+export default function ProfilePage() {
     // Unwrap the params Promise
-    const { username } = use(params)
-
-    const { data, isLoading, isError, error } = useProfile(username)
+    const { uuid } = useParams()
+    console.log(uuid)
+    const { data, isLoading, isError, error } = useProfile(uuid)
 
     if (isLoading) {
         return (
