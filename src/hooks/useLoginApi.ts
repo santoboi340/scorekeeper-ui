@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from 'root/context/AuthContext'
 import type { LoginRequest, LoginResponse, AuthError } from 'root/types/auth'
+import { API_URL } from '../../globalVar'
 
 export const useLoginApi = () => {
     const router = useRouter()
@@ -14,7 +15,7 @@ export const useLoginApi = () => {
     >({
         mutationFn: async ({ email, password }) => {
             const response = await fetch(
-                'https://scorepal-dev.mts-lab.net/api/v1/auth/authenticate',
+                `${API_URL}/api/v1/auth/authenticate`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },

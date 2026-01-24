@@ -7,11 +7,11 @@ interface ProfileViewProps {
     onEdit: () => void
 }
 
-export default function ProfileView({ profile, onEdit }: ProfileViewProps) {
-    const token = sessionStorage.getItem('access_token') || ''
-    const payload = JSON.parse(atob(token.split('.')[1]))
-    console.log(payload)
-    console.log('The Above Console log is located in ProfileView.tsx')
+export default function ProfileView({ profile }:ProfileViewProps) {
+    // const token = sessionStorage.getItem('access_token') || localStorage.getItem('access_token') || ''
+    // const payload = JSON.parse(atob(token.split('.')[1]))
+    console.log(profile)
+
     return (
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             {/* Header */}
@@ -26,7 +26,8 @@ export default function ProfileView({ profile, onEdit }: ProfileViewProps) {
                             />
                         ) : (
                             <span className="text-3xl sm:text-4xl text-primary-green font-bold">
-                                {profile.displayName.charAt(0).toUpperCase()}
+                                    {/* {profile.displayName.charAt(0).toUpperCase()} */}
+                                    f
                             </span>
                         )}
                     </div>
@@ -34,15 +35,9 @@ export default function ProfileView({ profile, onEdit }: ProfileViewProps) {
                         <h1 className="text-2xl sm:text-3xl font-bold text-cream mb-1">
                             {profile.displayName}
                         </h1>
-                        {profile.location &&
-                            profile.privacy.showLocation !== 'private' && (
-                                <p className="text-cream/80 text-sm sm:text-base">
-                                    {profile.location}
-                                </p>
-                            )}
                     </div>
                     <button
-                        onClick={onEdit}
+                        // onClick={onEdit}
                         className="w-full sm:w-auto px-6 py-2 bg-pickleball-yellow text-primary-green rounded-lg hover:bg-gold transition-colors font-semibold shadow-md"
                     >
                         Edit Profile
@@ -110,46 +105,7 @@ export default function ProfileView({ profile, onEdit }: ProfileViewProps) {
                     )}
                 </div>
 
-                {/* Stats (if visible) */}
-                {profile.privacy.showStats !== 'private' && (
-                    <div className="border-t-2 border-cream pt-6">
-                        <h2 className="text-lg sm:text-xl font-bold text-primary-green mb-4">
-                            Stats
-                        </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div className="text-center p-4 bg-teal/10 rounded-lg">
-                                <p className="text-3xl sm:text-4xl font-bold text-teal mb-1">
-                                    {profile.matchesPlayed}
-                                </p>
-                                <p className="text-xs sm:text-sm text-secondary-green font-semibold uppercase tracking-wide">
-                                    Matches Played
-                                </p>
-                            </div>
 
-                            {profile.winRate !== undefined && (
-                                <div className="text-center p-4 bg-gold/10 rounded-lg">
-                                    <p className="text-3xl sm:text-4xl font-bold text-gold mb-1">
-                                        {(profile.winRate * 100).toFixed(1)}%
-                                    </p>
-                                    <p className="text-xs sm:text-sm text-secondary-green font-semibold uppercase tracking-wide">
-                                        Win Rate
-                                    </p>
-                                </div>
-                            )}
-
-                            {profile.currentRating !== undefined && (
-                                <div className="text-center p-4 bg-burnt-orange/10 rounded-lg">
-                                    <p className="text-3xl sm:text-4xl font-bold text-burnt-orange mb-1">
-                                        {profile.currentRating}
-                                    </p>
-                                    <p className="text-xs sm:text-sm text-secondary-green font-semibold uppercase tracking-wide">
-                                        Rating
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     )

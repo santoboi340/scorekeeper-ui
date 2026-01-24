@@ -1,4 +1,3 @@
-// components/ProtectedRoute.tsx
 'use client'
 
 import { useAuth } from 'root/context/AuthContext'
@@ -7,6 +6,7 @@ import { useEffect } from 'react'
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const { isAuthenticated, isLoading } = useAuth()
+    console.log("THIS IS THE SL:KDFJSLKDF", isAuthenticated, isLoading)
     const router = useRouter()
 
     useEffect(() => {

@@ -1,6 +1,8 @@
 // src/hooks/useProfile.ts
 import { useQuery } from '@tanstack/react-query'
 import type { UserProfile } from 'root/types/user'
+import { API_URL } from '../../globalVar'
+
 
 const useProfile = (uuid: any) => {
     return useQuery({
@@ -12,7 +14,7 @@ const useProfile = (uuid: any) => {
             const token = localStorage.getItem('access_token')
 
             const response = await fetch(
-                `https://scorepal-dev.mts-lab.net/api/v1/user/profile/getprofile`,
+                 `${API_URL}/api/v1/user/profile/getprofile`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

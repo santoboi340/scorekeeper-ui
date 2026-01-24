@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/hooks/useApiDashboard.ts
 import { useMutation } from '@tanstack/react-query'
+import { API_URL } from '../../globalVar';
 
 export interface ApiCallRequest {
     method: string
@@ -22,7 +23,7 @@ export const useDashboardApis = () => {
     return useMutation<ApiCallResponse, Error, ApiCallRequest>({
         mutationFn: async ({ method, url, params, body }) => {
             console.log('incoming data', method, url, params, body)
-            const baseUrl = 'https://scorepal-dev.mts-lab.net'
+            const baseUrl = `${API_URL}`
             const startTime = Date.now()
 
             // Parse body if present
