@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/hooks/useApiDashboard.ts
 import { useMutation } from '@tanstack/react-query'
-import { API_URL } from '../../globalVar';
+import { API_URL } from '../../globalVar'
 
 export interface ApiCallRequest {
     method: string
@@ -22,16 +22,12 @@ export interface ApiCallResponse {
 export const useDashboardApis = () => {
     return useMutation<ApiCallResponse, Error, ApiCallRequest>({
         mutationFn: async ({ method, url, params, body }) => {
-            console.log('incoming data', method, url, params, body)
             const baseUrl = `${API_URL}`
             const startTime = Date.now()
 
             // Parse body if present
             let bodyData = null
             if (body && ['POST', 'PUT', 'PATCH'].includes(method)) {
-                console.log(
-                    'The API Contains a Body, AND , is of method POST PUT OR PATCH'
-                )
                 try {
                     bodyData = JSON.parse(body)
                 } catch (e) {
@@ -47,10 +43,6 @@ export const useDashboardApis = () => {
                 throw new Error('No authentication token found')
             }
 
-            console.log('API CALL CHECKPOINT - Contains Token')
-            console.log('API CALL CHECKPOINT - satisfies method body reqs')
-            console.log('📤 API Call:', { method, url, bodyData })
-
             let fetchUrl = url
             let fetchOptions: RequestInit = {
                 method, // ✅ Now matches the actual HTTP method
@@ -60,31 +52,12 @@ export const useDashboardApis = () => {
                 },
             }
 
-            // // For GET/DELETE, pass endpoint as query param
-            // if (method === 'GET' || method === 'DELETE') {
-            //     console.log(' API CALL CHECKPOINT - REQUEST WAS GET REQUEST')
-            //     fetchUrl = `/api/proxy?endpoint=${encodeURIComponent(url)}`
-            //     console.log(
-            //         ' API CALL CHECKPOINT - THIS IS THE GET URL',
-            //         fetchUrl
-            //     )
-            // }
-            // For POST/PUT/PATCH, pass endpoint and body in request body
             if (method === 'POST' || method === 'PUT') {
                 fetchOptions.body = JSON.stringify({
                     endpoint: url,
                     body: bodyData,
                 })
             }
-
-            if (method === 'PATCH') {
-                // PATCH requests use path parameters for this endpoint
-                // URL should already include /api/v1/user/update/{attribute}/{value}
-                // No body needed for this endpoint
-            }
-
-            console.log(fetchUrl)
-            console.log(fetchOptions)
 
             const res = await fetch(`${baseUrl}${fetchUrl}`, fetchOptions)
 
@@ -100,11 +73,6 @@ export const useDashboardApis = () => {
             }
 
             const data = await res.json()
-
-            console.log('✅ Response:', {
-                status: res.status,
-                time: responseTime,
-            })
 
             return {
                 status: res.status,

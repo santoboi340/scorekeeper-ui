@@ -7,11 +7,7 @@ interface ProfileViewProps {
     onEdit: () => void
 }
 
-export default function ProfileView({ profile }:ProfileViewProps) {
-    // const token = sessionStorage.getItem('access_token') || localStorage.getItem('access_token') || ''
-    // const payload = JSON.parse(atob(token.split('.')[1]))
-    console.log(profile)
-
+export default function ProfileView({ profile }: ProfileViewProps) {
     return (
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             {/* Header */}
@@ -26,8 +22,8 @@ export default function ProfileView({ profile }:ProfileViewProps) {
                             />
                         ) : (
                             <span className="text-3xl sm:text-4xl text-primary-green font-bold">
-                                    {/* {profile.displayName.charAt(0).toUpperCase()} */}
-                                    f
+                                {/* {profile.displayName.charAt(0).toUpperCase()} */}
+                                f
                             </span>
                         )}
                     </div>
@@ -104,8 +100,6 @@ export default function ProfileView({ profile }:ProfileViewProps) {
                         </div>
                     )}
                 </div>
-
-
             </div>
         </div>
     )

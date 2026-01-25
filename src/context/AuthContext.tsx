@@ -50,7 +50,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
             if (!token) {
                 setIsLoading(false)
-                console.log('No Token Available in Session or Local Storage')
                 return
             }
 
@@ -77,7 +76,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     email: decoded.email,
                 }
 
-                console.log('✅ User authenticated from token:', userData)
                 setUser(userData)
             } catch (error) {
                 console.error('❌ Invalid token:', error)
@@ -100,7 +98,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 email: decoded.email,
             }
 
-            console.log('✅ User loaded from token:', userData)
             setUser(userData)
         } catch (error) {
             console.error('❌ Failed to decode token:', error)

@@ -36,7 +36,6 @@ export const useRegisterApi = () => {
         },
 
         onSuccess: (data) => {
-            console.log('Registration successful:', data)
 
             // Store token
             localStorage.setItem('access_token', data.access_token)

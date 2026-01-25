@@ -46,7 +46,6 @@ export const useLoginApi = () => {
                 sessionStorage.setItem('access_token', data.access_token)
             }
 
-            console.log('Login successful:', data.message)
 
             // Update auth context
             login(data.access_token)
