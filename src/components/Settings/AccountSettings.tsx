@@ -53,8 +53,6 @@ export default function AccountSettings({
             return
         }
 
-        // TODO: Call password change API
-        console.log('Password change requested')
         setPasswordData({ current: '', new: '', confirm: '' })
         setShowPasswordChange(false)
     }

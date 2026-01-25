@@ -5,13 +5,13 @@
 import { useProfile } from '../../../hooks/userProfile'
 import ProfileView from 'root/components/Profile/ProfileView'
 import Link from 'next/link'
-import { ProtectedRoute } from 'root/components/ProtectedRoute.tsx/ProtectedRoute'
+import { ProtectedRoute } from 'root/components/ProtectedRoute/ProtectedRoute'
 import { useParams } from 'next/navigation'
 
 export default function ProfilePage() {
     // Unwrap the params Promise
     const { uuid } = useParams()
-    console.log(uuid)
+
     const { data, isLoading, isError, error } = useProfile(uuid)
 
     if (isLoading) {
@@ -51,14 +51,22 @@ export default function ProfilePage() {
         <ProtectedRoute>
             <div className="min-h-screen bg-cream">
                 <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
-                    <h1 className="text-3xl font-bold">{data.displayName}</h1>
-                    <p>{data.bio}</p>
-                    <ProfileView
-                        profile={data}
-                        onEdit={() =>
-                            console.log('Edit clicked - we will add this next!')
-                        }
-                    />
+                    {!isLoading && (
+                        <>
+                            <h1 className="text-3xl font-bold">
+                                {data.displayName}
+                            </h1>
+                            <p>{data.bio}</p>
+                            <ProfileView
+                                profile={data}
+                                onEdit={() =>
+                                    console.log(
+                                        'Edit clicked - we will add this next!'
+                                    )
+                                }
+                            />
+                        </>
+                    )}
                 </div>
             </div>
         </ProtectedRoute>

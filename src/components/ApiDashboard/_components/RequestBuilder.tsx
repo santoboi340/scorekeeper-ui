@@ -35,8 +35,6 @@ const RequestBuilder = ({ selectedEndpoint, apiCall }: any) => {
 
     const pathParamKeys = extractPathParams(url)
 
-    console.log(method, url, body, params)
-    // Update form when endpoint changes (using state comparison pattern)
     if (selectedEndpoint !== prevEndpoint) {
         setMethod(selectedEndpoint.method)
         setUrl(selectedEndpoint.path)

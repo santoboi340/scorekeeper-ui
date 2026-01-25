@@ -44,8 +44,6 @@ export default function DangerZone({ settings }: DangerZoneProps) {
             return
         }
 
-        // TODO: Call actual delete API
-        console.log('Account deletion requested')
         alert(
             'Account deletion would happen here. This is currently disabled in the demo.'
         )

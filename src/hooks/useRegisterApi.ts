@@ -1,3 +1,4 @@
+import { API_URL } from './../../globalVar';
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from 'root/context/AuthContext'
@@ -13,7 +14,7 @@ export const useRegisterApi = () => {
 
     return useMutation<RegisterResponse, AuthError, RegisterRequest>({
         mutationFn: async (registerData) => {
-            const response = await fetch('/api/auth/register', {
+            const response = await fetch(`${API_URL}/api/v1/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(registerData),
@@ -35,7 +36,6 @@ export const useRegisterApi = () => {
         },
 
         onSuccess: (data) => {
-            console.log('Registration successful:', data)
 
             // Store token
             localStorage.setItem('access_token', data.access_token)
