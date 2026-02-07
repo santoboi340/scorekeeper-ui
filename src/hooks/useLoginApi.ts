@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from 'root/context/AuthContext'
 import type { LoginRequest, LoginResponse, AuthError } from 'root/types/auth'
-import { API_URL } from '../../globalVar'
+import { fetchApiUrl } from '../../globalVar'
 
 export const useLoginApi = () => {
     const router = useRouter()
@@ -14,8 +14,9 @@ export const useLoginApi = () => {
         LoginRequest & { rememberMe: boolean }
     >({
         mutationFn: async ({ email, password }) => {
+            const apiUrl = await fetchApiUrl()
             const response = await fetch(
-                `${API_URL}/api/v1/auth/authenticate`,
+                `${apiUrl}/api/v1/auth/authenticate`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
