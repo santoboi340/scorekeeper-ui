@@ -1,7 +1,16 @@
-const DEFAULT_API_URL =
-  process.env.NEXT_PUBLIC_WEB_ORIGIN || 'https://scorepal-dev.mts-lab.net'
+const resolveDefaultApiUrl = (): string => {
+  if (process.env.NEXT_PUBLIC_WEB_ORIGIN) {
+    return process.env.NEXT_PUBLIC_WEB_ORIGIN
+  }
 
-let apiUrl = DEFAULT_API_URL
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return window.location.origin
+  }
+
+  return ''
+}
+
+let apiUrl = resolveDefaultApiUrl()
 let apiUrlPromise: Promise<string> | null = null
 
 const fetchApiUrl = async (): Promise<string> => {
@@ -18,7 +27,7 @@ const fetchApiUrl = async (): Promise<string> => {
         return res.json()
       })
       .then((config) => {
-        if (config?.apiUrl) {
+        if (!apiUrl && config?.apiUrl) {
           apiUrl = config.apiUrl
         }
         return apiUrl
