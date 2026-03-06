@@ -1,9 +1,13 @@
 const resolveDefaultApiUrl = (): string => {
+  if (process.env.NEXT_PUBLIC_WEB_ORIGIN) {
+    return process.env.NEXT_PUBLIC_WEB_ORIGIN
+  }
+
   if (typeof window !== 'undefined' && window.location?.origin) {
     return window.location.origin
   }
 
-  return process.env.NEXT_PUBLIC_WEB_ORIGIN || ''
+  return ''
 }
 
 let apiUrl = resolveDefaultApiUrl()
@@ -23,7 +27,7 @@ const fetchApiUrl = async (): Promise<string> => {
         return res.json()
       })
       .then((config) => {
-        if (config?.apiUrl) {
+        if (!apiUrl && config?.apiUrl) {
           apiUrl = config.apiUrl
         }
         return apiUrl
