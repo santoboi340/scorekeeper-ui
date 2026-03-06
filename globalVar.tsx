@@ -1,11 +1,9 @@
-const HARDCODED_API_URL = 'https://scorepal-dev.mts-lab.net'
-
 const resolveDefaultApiUrl = (): string => {
   if (typeof window !== 'undefined' && window.location?.origin) {
     return window.location.origin
   }
 
-  return process.env.NEXT_PUBLIC_WEB_ORIGIN || HARDCODED_API_URL
+  return process.env.NEXT_PUBLIC_WEB_ORIGIN || ''
 }
 
 let apiUrl = resolveDefaultApiUrl()
