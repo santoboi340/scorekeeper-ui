@@ -19,6 +19,7 @@
             }
         ],
         "paths": {
+            "base/*": ["./"],
             "root/*": ["./src/*"],
             "@/*": ["./src/app/*"]
         }
@@ -30,7 +31,8 @@
         ".next/types/**/*.ts",
         ".next/dev/types/**/*.ts",
         "**/*.mts",
-        "src/app/profile/[uuid]/page.tsx"
-, "src/components/ProtectedRoute"    ],
+        "src/app/profile/[uuid]/page.tsx",
+        "src/components/ProtectedRoute"
+    ],
     "exclude": ["node_modules"]
 }

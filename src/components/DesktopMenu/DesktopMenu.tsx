@@ -7,14 +7,12 @@ import {
 } from 'root/components/DesktopMenu/DesktopMenu.d'
 import { Logo } from '../Logo'
 import { useAuth } from 'root/context/AuthContext'
-import { useRouter } from 'next/navigation'
 
 const DesktopMenu = ({
     className = '',
     linkClassName = '',
 }: DesktopMenuProps) => {
     const { user, isAuthenticated, logout } = useAuth()
-    const router = useRouter()
     const defaultLinks: DesktopMenuLink[] = [
         { label: 'Home', href: '/' },
         { label: 'Features', href: '/' },
@@ -27,12 +25,6 @@ const DesktopMenu = ({
             protected: true,
         },
     ]
-
-    const handleLinkClick = (link: DesktopMenuLink) => {
-        if (link.href) {
-            router.push(link.href)
-        }
-    }
 
     return (
         <nav className={`${styles.container} ${className}`}>
@@ -48,7 +40,6 @@ const DesktopMenu = ({
                                 key={index}
                                 href={link.href}
                                 className={`${styles.navLink} ${linkClassName}`}
-                                onClick={() => handleLinkClick(link)}
                             >
                                 {link.label}
                             </Link>
