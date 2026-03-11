@@ -1,4 +1,4 @@
-import { API_URL } from './../../globalVar';
+import { fetchApiUrl } from './../../globalVar';
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from 'root/context/AuthContext'
@@ -14,7 +14,8 @@ export const useRegisterApi = () => {
 
     return useMutation<RegisterResponse, AuthError, RegisterRequest>({
         mutationFn: async (registerData) => {
-            const response = await fetch(`${API_URL}/api/v1/auth/register`, {
+            const apiUrl = await fetchApiUrl()
+            const response = await fetch(`${apiUrl}/api/v1/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(registerData),

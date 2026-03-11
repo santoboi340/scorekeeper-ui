@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // src/hooks/useApiDashboard.ts
 import { useMutation } from '@tanstack/react-query'
-import { API_URL } from '../../globalVar'
+import { fetchApiUrl } from '../../globalVar'
 
 export interface ApiCallRequest {
     method: string
@@ -22,7 +22,7 @@ export interface ApiCallResponse {
 export const useDashboardApis = () => {
     return useMutation<ApiCallResponse, Error, ApiCallRequest>({
         mutationFn: async ({ method, url, params, body }) => {
-            const baseUrl = `${API_URL}`
+            const baseUrl = await fetchApiUrl()
             const startTime = Date.now()
 
             // Parse body if present
