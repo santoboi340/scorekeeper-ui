@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
+import { API_URL } from '../../../../globalVar'
 const DashSidebar = ({ selectedEndpoint, handleEndpointClick }: any) => {
     return (
         <aside className="sidebar">
@@ -64,51 +65,37 @@ const ENDPOINTS = {
             id: 'auth-register',
             method: 'POST',
             name: 'Register',
-            path: '/api/v1/auth/register',
+            path: `${API_URL}/api/v1/auth/register`,
             body: '{\n  "email": "",\n  "password": "",\n  "firstname": "",\n  "lastname": "",\n  "role": ""\n}',
         },
         {
             id: 'auth-authenticate',
             method: 'POST',
             name: 'Authenticate',
-            path: '/api/v1/auth/authenticate',
+            path: `${API_URL}/api/v1/auth/authenticate`,
             body: '{\n  "email": "",\n  "password": ""\n}',
         },
     ],
     user: [
         {
-            id: 'update-user-attribute',
-            method: 'PATCH',
-            name: 'Update User Attribute',
-            path: '/api/v1/user/update',
-            body: '{\n  "attribute": "",\n  "value": ""\n}',
-        },
-        {
-            id: 'user-patch-user',
-            method: 'PATCH',
-            name: 'Patch User',
-            path: '/api/v1/user/me',
-            body: '{\n  "additionalProp1": "",\n  "additionalProp2": "",\n  "additionalProp3": ""\n}',
-        },
-        {
             id: 'user-get-user',
             method: 'GET',
             name: 'Get User',
-            path: '/api/v1/user',
+            path: `${API_URL}/api/v1/user`,
             body: '',
         },
         {
             id: 'user-get-user-by-id',
             method: 'GET',
             name: 'Get User By ID',
-            path: '/api/v1/user/:id',
+            path: `${API_URL}/api/v1/user/:id`,
             body: '',
         },
         {
             id: 'user-get-current-user',
             method: 'GET',
             name: 'Get Current User',
-            path: '/api/v1/user/getinfo',
+            path: `${API_URL}/api/v1/user/getInfo`,
             body: '',
         },
         {

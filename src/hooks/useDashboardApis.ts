@@ -44,6 +44,7 @@ export const useDashboardApis = () => {
             }
 
             let fetchUrl = url
+            console.log('FETCH URL', fetchUrl)
             let fetchOptions: RequestInit = {
                 method, // ✅ Now matches the actual HTTP method
                 headers: {
