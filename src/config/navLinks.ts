@@ -14,8 +14,12 @@ export const getNavLinks = (user: User | null): NavLink[] => [
     { label: 'Contact', href: '/' },
     ...(user
         ? [
-              { label: 'Api Dashboard', href: '/api-dashboard', protected: true },
-              { label: 'Profile', href: `/profile/${user.uuid}`, protected: true },
+              // Place Protected Links Here
+              /** {
+                  label: 'Api Dashboard',
+                  href: '/api-dashboard',
+                  protected: true,
+              },*/
           ]
         : []),
 ]

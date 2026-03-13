@@ -73,11 +73,12 @@ export const useDashboardApis = () => {
                 )
             }
 
-            const data = await res.json()
+            const text = await res.text()
+            const data = text ? JSON.parse(text) : null
 
             return {
                 status: res.status,
-                statusText: res.statusText,
+                statusText: res.statusText || (res.ok ? 'OK' : 'Error'),
                 time: responseTime,
                 data,
                 headers: Object.fromEntries(res.headers.entries()),
