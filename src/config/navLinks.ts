@@ -1,4 +1,4 @@
-import type { User } from 'root/context/AuthContext.d'
+import type { User } from '../context/AuthContext.d'
 
 export type NavLink = {
     label: string

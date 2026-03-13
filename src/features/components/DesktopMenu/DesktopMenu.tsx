@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { type DesktopMenuLink, DesktopMenuProps } from 'root/components/DesktopMenu/DesktopMenu.d'
+import { type DesktopMenuLink, DesktopMenuProps } from 'root/components/Navbar/DesktopMenu/DesktopMenu.d'
 import { Logo } from 'root/components/Logo'
 import { useAuth } from 'root/context/AuthContext'
 

@@ -1,3 +1,5 @@
+import type { User } from '../../../context/AuthContext.d'
+
 type DesktopMenuLink = {
     label: string
     href: string
