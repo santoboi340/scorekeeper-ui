@@ -3,12 +3,14 @@
 import Link from 'next/link'
 import { Logo } from '../../Logo'
 import { useAuth } from 'root/context/AuthContext'
-import { getNavLinks, getAuthLink } from 'root/config/navLinks'
+import { getNavLinks } from 'root/config/navLinks'
+import { UserAvatarPanel } from '../UserAvatarPanel'
+
+const ctaStyle = 'bg-pickleball-yellow text-primary-green px-6 py-2 rounded-lg font-semibold hover:bg-gold transition-colors shadow-sm'
 
 const DesktopMenu = () => {
     const { user, isAuthenticated, logout } = useAuth()
     const links = getNavLinks(user)
-    const authLink = getAuthLink(isAuthenticated, logout)
 
     return (
         <nav className="sticky top-0 z-50 bg-cream border-b border-neutral shadow-sm px-4 pt-4 pb-6">
@@ -23,19 +25,14 @@ const DesktopMenu = () => {
                     ))}
                 </div>
 
-                {authLink.onClick ? (
-                    <div className="flex flex-col items-center space-x-4 text-black">
-                        <span>Hello {user?.email}</span>
-                        <button className={ctaStyle} onClick={authLink.onClick}>{authLink.label}</button>
-                    </div>
+                {isAuthenticated && user ? (
+                    <UserAvatarPanel user={user} onLogout={logout} />
                 ) : (
-                    <Link href={authLink.href} className={ctaStyle}>{authLink.label}</Link>
+                    <Link href="/login" className={ctaStyle}>Login</Link>
                 )}
             </div>
         </nav>
     )
 }
-
-const ctaStyle = 'bg-pickleball-yellow text-primary-green px-6 py-2 rounded-lg font-semibold hover:bg-gold transition-colors shadow-sm'
 
 export { DesktopMenu }

@@ -12,6 +12,7 @@ const extractUser = (decoded: JWTPayload): User => ({
     id: decoded.sub || decoded.userId || 'unknown',
     uuid: decoded.uuid,
     email: decoded.email,
+    firstname: decoded.firstname,
 })
 
 export function AuthProvider({ children }: { children: ReactNode }) {

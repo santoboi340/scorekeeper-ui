@@ -6,7 +6,8 @@ import { RxHamburgerMenu } from 'react-icons/rx'
 import { IoMdClose } from 'react-icons/io'
 import Link from 'next/link'
 import { useAuth } from 'root/context/AuthContext'
-import { getNavLinks, getAuthLink, type NavLink } from 'root/config/navLinks'
+import { getNavLinks, type NavLink } from 'root/config/navLinks'
+import { UserAvatarPanel } from '../UserAvatarPanel'
 
 const MobileMenu = () => {
     const [isOpen, setIsOpen] = useState(false)
@@ -14,15 +15,13 @@ const MobileMenu = () => {
     const pathname = usePathname()
     const { user, isAuthenticated, logout } = useAuth()
 
-    const links = [...getNavLinks(user), getAuthLink(isAuthenticated, logout)]
+    const links = getNavLinks(user)
 
-    // Close on route change (setState-during-render pattern)
     if (pathname !== prevPathname) {
         setPrevPathname(pathname)
         if (isOpen) setIsOpen(false)
     }
 
-    // Lock body scroll when open
     useEffect(() => {
         document.body.style.overflow = isOpen ? 'hidden' : ''
         return () => { document.body.style.overflow = '' }
@@ -46,6 +45,12 @@ const MobileMenu = () => {
 
             <div className={`fixed inset-x-0 bottom-0 h-[50vh] bg-primary-green/95 backdrop-blur-sm shadow-lg transition-transform duration-400 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
                 <nav className="flex flex-col space-y-1 p-4 items-center justify-center">
+                    {isAuthenticated && user && (
+                        <div className="pb-3 mb-2 border-b border-cream/20 w-full flex justify-center">
+                            <UserAvatarPanel user={user} onLogout={() => { logout(); setIsOpen(false) }} compact />
+                        </div>
+                    )}
+
                     {links.map((link) => (
                         <Link
                             key={link.label}
@@ -56,6 +61,12 @@ const MobileMenu = () => {
                             {link.label}
                         </Link>
                     ))}
+
+                    {!isAuthenticated && (
+                        <Link href="/login" onClick={() => setIsOpen(false)} className="block text-cream hover:text-pickleball-yellow hover:bg-secondary-green px-4 py-3 rounded-md text-lg font-medium transition-colors">
+                            Login
+                        </Link>
+                    )}
                 </nav>
             </div>
         </div>

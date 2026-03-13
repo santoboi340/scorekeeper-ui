@@ -10,6 +10,7 @@ export interface User {
     id: string
     uuid?: string
     email: string
+    firstname?: string
 }
 
 export interface JWTPayload {

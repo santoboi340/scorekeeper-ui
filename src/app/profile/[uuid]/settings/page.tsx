@@ -1,5 +1,3 @@
-// app/settings/page.tsx
-
 'use client'
 
 import { useState } from 'react'
@@ -11,143 +9,91 @@ import AccountSettings from 'root/components/Settings/AccountSettings'
 import DangerZone from 'root/components/Settings/DangerZone'
 import Link from 'next/link'
 
-type SettingsTab =
-    | 'account'
-    | 'privacy'
-    | 'notifications'
-    | 'preferences'
-    | 'data'
+const tabs = [
+    { id: 'account', label: 'Account', icon: '👤', component: AccountSettings },
+    { id: 'privacy', label: 'Privacy', icon: '🔒', component: PrivacySettings },
+    { id: 'notifications', label: 'Notifications', icon: '🔔', component: NotificationSettings },
+    { id: 'preferences', label: 'Preferences', icon: '⚙️', component: PreferencesSettings },
+    { id: 'data', label: 'Data & Security', icon: '🛡️', component: DangerZone },
+]
 
 export default function SettingsPage() {
     // TODO: Get actual logged-in username from auth context
     const currentUsername = 'sarah-chen'
 
-    const { settings, isLoading, isSaving, error, updateSettings } =
-        useSettings(currentUsername)
-    const [activeTab, setActiveTab] = useState<SettingsTab>('account')
+    const { settings, isLoading, isSaving, error, updateSettings } = useSettings(currentUsername)
+    const [activeTab, setActiveTab] = useState(tabs[0].id)
     const [saveMessage, setSaveMessage] = useState<string | null>(null)
+
+    const flash = (msg: string) => {
+        setSaveMessage(msg)
+        setTimeout(() => setSaveMessage(null), 3000)
+    }
 
     const handleSave = async (updates: any) => {
         try {
             await updateSettings(updates)
-            setSaveMessage('Settings saved successfully')
-            setTimeout(() => setSaveMessage(null), 3000)
-        } catch (err) {
-            setSaveMessage('Failed to save settings')
-            setTimeout(() => setSaveMessage(null), 3000)
+            flash('Settings saved successfully')
+        } catch {
+            flash('Failed to save settings')
         }
     }
 
-    if (isLoading) {
+    if (isLoading)
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading settings...</p>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-green mx-auto mb-4" />
+                    <p className="text-secondary-green">Loading settings...</p>
                 </div>
             </div>
         )
-    }
 
-    if (error || !settings) {
+    if (error || !settings)
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="text-center">
-                    <p className="text-red-600 mb-4">
-                        {error || 'Failed to load settings'}
-                    </p>
-                    <Link href="/" className="text-blue-600 hover:underline">
-                        Back to home
-                    </Link>
+            <div className="flex items-center justify-center min-h-screen text-center">
+                <div>
+                    <p className="text-red-600 mb-4">{error || 'Failed to load settings'}</p>
+                    <Link href="/" className="text-teal hover:text-primary-green underline">Back to home</Link>
                 </div>
             </div>
         )
-    }
 
-    const tabs: { id: SettingsTab; label: string; icon: string }[] = [
-        { id: 'account', label: 'Account', icon: '👤' },
-        { id: 'privacy', label: 'Privacy', icon: '🔒' },
-        { id: 'notifications', label: 'Notifications', icon: '🔔' },
-        { id: 'preferences', label: 'Preferences', icon: '⚙️' },
-        { id: 'data', label: 'Data & Security', icon: '🛡️' },
-    ]
+    const ActiveComponent: React.FC<{
+        settings: typeof settings
+        onSave: typeof handleSave
+        isSaving: boolean
+    }> = tabs.find((t) => t.id === activeTab)!.component
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-8">Settings</h1>
+            <h1 className="text-3xl font-bold text-pickleball-yellow mb-8">Settings</h1>
 
-            {/* Save Message Toast */}
             {saveMessage && (
-                <div
-                    className={`fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg ${
-                        saveMessage.includes('success')
-                            ? 'bg-green-500'
-                            : 'bg-red-500'
-                    } text-white animate-fade-in`}
-                >
+                <div className={`fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg text-white animate-fade-in ${saveMessage.includes('success') ? 'bg-primary-green' : 'bg-red-500'}`}>
                     {saveMessage}
                 </div>
             )}
 
             <div className="flex flex-col md:flex-row gap-8">
-                {/* Sidebar Navigation */}
                 <nav className="md:w-64 flex-shrink-0">
                     <ul className="space-y-1">
                         {tabs.map((tab) => (
                             <li key={tab.id}>
                                 <button
                                     onClick={() => setActiveTab(tab.id)}
-                                    className={`w-full text-left px-4 py-3 rounded-lg transition flex items-center gap-3 ${
-                                        activeTab === tab.id
-                                            ? 'bg-blue-600 text-white'
-                                            : 'hover:bg-gray-100 text-gray-700'
-                                    }`}
+                                    className={`w-full text-left px-4 py-3 rounded-lg transition flex items-center gap-3 ${activeTab === tab.id ? 'bg-pickleball-yellow text-primary-green font-semibold' : 'text-cream hover:bg-secondary-green hover:text-pickleball-yellow'}`}
                                 >
                                     <span className="text-xl">{tab.icon}</span>
-                                    <span className="font-medium">
-                                        {tab.label}
-                                    </span>
+                                    <span className="font-medium">{tab.label}</span>
                                 </button>
                             </li>
                         ))}
                     </ul>
                 </nav>
 
-                {/* Content Area */}
-                <div className="flex-1 bg-white rounded-lg shadow-md p-6">
-                    {activeTab === 'account' && (
-                        <AccountSettings
-                            settings={settings}
-                            onSave={handleSave}
-                            isSaving={isSaving}
-                        />
-                    )}
-
-                    {activeTab === 'privacy' && (
-                        <PrivacySettings
-                            settings={settings}
-                            onSave={handleSave}
-                            isSaving={isSaving}
-                        />
-                    )}
-
-                    {activeTab === 'notifications' && (
-                        <NotificationSettings
-                            settings={settings}
-                            onSave={handleSave}
-                            isSaving={isSaving}
-                        />
-                    )}
-
-                    {activeTab === 'preferences' && (
-                        <PreferencesSettings
-                            settings={settings}
-                            onSave={handleSave}
-                            isSaving={isSaving}
-                        />
-                    )}
-
-                    {activeTab === 'data' && <DangerZone settings={settings} />}
+                <div className="flex-1 bg-cream rounded-lg shadow-md p-6 border border-gold">
+                    <ActiveComponent settings={settings} onSave={handleSave} isSaving={isSaving} />
                 </div>
             </div>
         </div>

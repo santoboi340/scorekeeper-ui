@@ -19,8 +19,3 @@ export const getNavLinks = (user: User | null): NavLink[] => [
           ]
         : []),
 ]
-
-export const getAuthLink = (isAuthenticated: boolean, logout: () => void): NavLink =>
-    isAuthenticated
-        ? { label: 'Logout', href: '#', onClick: logout }
-        : { label: 'Login', href: '/login' }
