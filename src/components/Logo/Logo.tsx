@@ -1,35 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { LogoProps } from './Logo.d'
-import { useIsMobile } from 'root/hooks/useIsMobileView'
+import type { LogoProps } from './Logo.d'
 
-const Logo = ({ imageUrl, alt = 'Logo', href = '/' }: LogoProps) => {
-    const isMobile = useIsMobile()
+const Logo = ({ imageUrl, alt = 'Logo', href = '/', className = '' }: LogoProps) => {
+    const img = imageUrl
+        ? <img src={imageUrl} alt={alt} className={`w-30 md:w-37.5 h-auto ${className}`} />
+        : null
 
-    const logoContent = (
-        <div className="flex items-center">
-            {imageUrl ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                    src={imageUrl}
-                    alt={alt}
-                    width={isMobile ? 120 : 150}
-                    height={isMobile ? 80 : 100}
-                />
-            ) : null}
-        </div>
-    )
-
-    if (href) {
-        return (
-            <Link href={href} className="">
-                {logoContent}
-            </Link>
-        )
-    }
-
-    return logoContent
+    return href ? <Link href={href}>{img}</Link> : img
 }
 
 export { Logo }

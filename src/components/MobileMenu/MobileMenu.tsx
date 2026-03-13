@@ -1,58 +1,53 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 import { RxHamburgerMenu } from 'react-icons/rx'
 import { IoMdClose } from 'react-icons/io'
-import { type MobileMenuLink, MobileMenuProps } from './MobileMenu.d'
-
 import Link from 'next/link'
-const defaultLinks: MobileMenuLink[] = [
-    { label: 'Home', href: '/' },
-    { label: 'Features', href: '/' },
-    { label: 'About', href: '/' },
-    { label: 'Contact', href: '/' },
-    { label: 'Login', href: '/login' },
-]
+import { useAuth } from 'root/context/AuthContext'
+import { getNavLinks, getAuthLink, type NavLink } from 'root/config/navLinks'
 
-const MobileMenu = ({
-    user,
-    links = defaultLinks,
-    className = '',
-    iconClassName = '',
-}: MobileMenuProps) => {
+const MobileMenu = () => {
     const [isOpen, setIsOpen] = useState(false)
-    const toggleMenu = () => {
-        setIsOpen(!isOpen)
-    }
-    const handleLinkClick = (link: MobileMenuLink) => {
-        if (link.onClick) {
-            link.onClick()
-        }
+    const pathname = usePathname()
+    const { user, isAuthenticated, logout } = useAuth()
+
+    const links = [...getNavLinks(user), getAuthLink(isAuthenticated, logout)]
+
+    // Close on route change
+    useEffect(() => setIsOpen(false), [pathname])
+
+    // Lock body scroll when open
+    useEffect(() => {
+        document.body.style.overflow = isOpen ? 'hidden' : ''
+        return () => { document.body.style.overflow = '' }
+    }, [isOpen])
+
+    const handleClick = (link: NavLink) => {
+        link.onClick?.()
         setIsOpen(false)
     }
 
     return (
-        <div className={`relative ${className}`}>
+        <div className="relative">
             <button
-                onClick={toggleMenu}
-                className={`text-secondary-green ${iconClassName}`}
+                onClick={() => setIsOpen(!isOpen)}
+                className="text-secondary-green"
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isOpen}
             >
-                {isOpen ? (
-                    <IoMdClose className="text-3xl" />
-                ) : (
-                    <RxHamburgerMenu className="text-3xl" />
-                )}
+                {isOpen ? <IoMdClose className="text-3xl" /> : <RxHamburgerMenu className="text-3xl" />}
             </button>
-            <div className={isOpen ? styles.openMenu : styles.closeMenu}>
-                <nav className={styles.menuContent}>
-                    {links.map((link, index) => (
+
+            <div className={`fixed inset-x-0 bottom-0 h-[50vh] bg-primary-green/95 backdrop-blur-sm shadow-lg transition-transform duration-400 ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}>
+                <nav className="flex flex-col space-y-1 p-4 items-center justify-center">
+                    {links.map((link) => (
                         <Link
-                            key={index}
+                            key={link.label}
                             href={link.href}
-                            onClick={() => handleLinkClick(link)}
-                            className={styles.menuLink}
+                            onClick={() => handleClick(link)}
+                            className="block text-cream hover:text-pickleball-yellow hover:bg-secondary-green px-4 py-3 rounded-md text-lg font-medium transition-colors"
                         >
                             {link.label}
                         </Link>
@@ -64,10 +59,3 @@ const MobileMenu = ({
 }
 
 export { MobileMenu }
-
-const styles = {
-    menuLink: `block text-cream hover:text-pickleball-yellow hover:bg-secondary-green px-4 py-3 rounded-md text-lg font-medium transition-colors`,
-    menuContent: `flex flex-col space-y-1 p-4 items-center justify-center`,
-    openMenu: `fixed right-0 bottom-0 transform-gpu translate-y ease-out duration-400 w-full h-50vh  bg-primary-green/95 backdrop-blur-sm shadow-lg `,
-    closeMenu: `fixed right-0 -bottom-2000 transform-gpu translate-y ease-in duration-500  w-full h-50vh  bg-primary-green/95 backdrop-blur-sm shadow-lg `,
-}

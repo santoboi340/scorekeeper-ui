@@ -1,127 +1,60 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
-import {
-    createContext,
-    useContext,
-    useEffect,
-    useState,
-    ReactNode,
-} from 'react'
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react'
 import type { User, JWTPayload, AuthContextType } from './AuthContext.d'
 import { jwtDecode } from 'jwt-decode'
+import { useRouter } from 'next/navigation'
+import { tokenStorage } from 'root/lib/tokenStorage'
 
-/**
- * Create the Initial Context.
- * It should take the shape of the AuthContextType
- */
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-/**
- * Helper Function in order to grab
- * whatever token the user has stored in
- * either local/session storage
- * @returns string | null
- */
-const getStoredToken = (): string | null => {
-    if (typeof window === 'undefined') return null
-    return (
-        localStorage.getItem('access_token') ||
-        sessionStorage.getItem('access_token')
-    )
-}
+const extractUser = (decoded: JWTPayload): User => ({
+    id: decoded.sub || decoded.userId || 'unknown',
+    uuid: decoded.uuid,
+    email: decoded.email,
+})
 
-/**
- * Create the Auth Provider.
- * This is the Container that wraps
- * the entire application.
- * This will enable the Context Functions
- * to be used anywhere within the app.
- * @param ReactNode
- * @returns <AuthContextProvider />
- */
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const [isLoading, setIsLoading] = useState(true)
+    const router = useRouter()
 
     useEffect(() => {
-        const verifyAuth = () => {
-            const token = getStoredToken()
+        const token = tokenStorage.get()
+        if (!token) { setIsLoading(false); return }
 
-            if (!token) {
-                setIsLoading(false)
-                return
-            }
-
-            try {
-                const decoded = jwtDecode<JWTPayload>(token)
-
-                // Check if token is expired
-                const now = Date.now() / 1000 // Convert to seconds
-                if (decoded.exp && decoded.exp < now) {
-                    console.warn(
-                        '⏰ Token expired at',
-                        new Date(decoded.exp * 1000)
-                    )
-                    localStorage.removeItem('access_token')
-                    sessionStorage.removeItem('access_token')
-                    setIsLoading(false)
-                    return
-                }
-
-                // Extract user from token
-                const userData: User = {
-                    id: decoded.sub || decoded.userId || 'unknown',
-                    uuid: decoded.uuid,
-                    email: decoded.email,
-                }
-
-                setUser(userData)
-            } catch (error) {
-                console.error('❌ Invalid token:', error)
-                localStorage.removeItem('access_token')
-                sessionStorage.removeItem('access_token')
-            } finally {
-                setIsLoading(false)
-            }
-        }
-
-        verifyAuth()
-    }, [])
-
-    const login = (token: string) => {
         try {
             const decoded = jwtDecode<JWTPayload>(token)
-            const userData: User = {
-                id: decoded.sub || decoded.userId || 'unknown',
-                uuid: decoded.uuid,
-                email: decoded.email,
+            if (decoded.exp && decoded.exp < Date.now() / 1000) {
+                tokenStorage.clear()
+            } else {
+                setUser(extractUser(decoded))
             }
-
-            setUser(userData)
-        } catch (error) {
-            console.error('❌ Failed to decode token:', error)
+        } catch {
+            tokenStorage.clear()
+        } finally {
+            setIsLoading(false)
         }
-    }
+    }, [])
 
-    const logout = () => {
-        localStorage.removeItem('access_token')
-        sessionStorage.removeItem('access_token')
-        localStorage.removeItem('remembered_email')
+    const login = useCallback((token: string, remember = false) => {
+        try {
+            const decoded = jwtDecode<JWTPayload>(token)
+            tokenStorage.set(token, remember)
+            setUser(extractUser(decoded))
+        } catch (error) {
+            console.error('Failed to decode token:', error)
+        }
+    }, [])
+
+    const logout = useCallback(() => {
+        tokenStorage.clear()
         setUser(null)
-        window.location.href = '/'
-    }
+        router.push('/')
+    }, [router])
 
     return (
-        <AuthContext.Provider
-            value={{
-                user,
-                isLoading,
-                isAuthenticated: !!user,
-                login,
-                logout,
-            }}
-        >
+        <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, logout }}>
             {children}
         </AuthContext.Provider>
     )
@@ -129,8 +62,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
     const context = useContext(AuthContext)
-    if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider')
-    }
+    if (!context) throw new Error('useAuth must be used within an AuthProvider')
     return context
 }
