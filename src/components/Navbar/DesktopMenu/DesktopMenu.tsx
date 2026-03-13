@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Logo } from '../Logo'
+import { Logo } from '../../Logo'
 import { useAuth } from 'root/context/AuthContext'
 import { getNavLinks, getAuthLink } from 'root/config/navLinks'
 

@@ -10,13 +10,17 @@ import { getNavLinks, getAuthLink, type NavLink } from 'root/config/navLinks'
 
 const MobileMenu = () => {
     const [isOpen, setIsOpen] = useState(false)
+    const [prevPathname, setPrevPathname] = useState<string | null>(null)
     const pathname = usePathname()
     const { user, isAuthenticated, logout } = useAuth()
 
     const links = [...getNavLinks(user), getAuthLink(isAuthenticated, logout)]
 
-    // Close on route change
-    useEffect(() => setIsOpen(false), [pathname])
+    // Close on route change (setState-during-render pattern)
+    if (pathname !== prevPathname) {
+        setPrevPathname(pathname)
+        if (isOpen) setIsOpen(false)
+    }
 
     // Lock body scroll when open
     useEffect(() => {

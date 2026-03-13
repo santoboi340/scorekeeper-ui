@@ -1,7 +1,7 @@
 'use client'
 
-import { DesktopMenu } from '../DesktopMenu/DesktopMenu'
-import { MobileMenu } from '../MobileMenu/MobileMenu'
+import { DesktopMenu } from './DesktopMenu/DesktopMenu'
+import { MobileMenu } from './MobileMenu/MobileMenu'
 import { Logo } from '../Logo'
 
 const Navbar = () => (
