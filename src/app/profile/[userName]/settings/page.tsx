@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import type { SettingsUpdatePayload } from 'root/types/settings'
 import { useSettings } from 'root/hooks/useSettings'
 import PrivacySettings from 'root/components/Settings/PrivacySettings'
 import NotificationSettings from 'root/components/Settings/NotificationSettings'
@@ -30,7 +31,7 @@ export default function SettingsPage() {
         setTimeout(() => setSaveMessage(null), 3000)
     }
 
-    const handleSave = async (updates: any) => {
+    const handleSave = async (updates: SettingsUpdatePayload) => {
         try {
             await updateSettings(updates)
             flash('Settings saved successfully')

@@ -1,31 +1,18 @@
-// types/user.ts
-
-export type SkillLevel =
-    | 'BEGINNER'
-    | 'INTERMEDIATE'
-    | 'ADVANCED'
-    | 'PRO'
-    | undefined
-export type PlayStyle =
-    | 'AGGRESSIVE'
-    | 'DEFENSIVE'
-    | 'BALANCED'
-    | 'STRATEGIC'
-    | undefined
-
+export type SkillLevel = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'PRO'
+export type PlayStyle = 'AGGRESSIVE' | 'DEFENSIVE' | 'BALANCED' | 'STRATEGIC'
 export type Handedness = 'LEFT' | 'RIGHT' | 'AMBIDEXTROUS'
 export type PrivacyType = 'PUBLIC' | 'FRIENDS' | 'PRIVATE'
+
 export interface User {
     id: string
+    uuid?: string
     email: string
     firstname?: string
     lastname?: string
     role?: 'user' | 'admin'
 }
 
-// src/types/user.ts
 export interface UserProfile {
-    // Basic info
     id: string
     userName: string
     displayName: string
@@ -34,26 +21,25 @@ export interface UserProfile {
     bio?: string
     location?: string
 
-    // Pickleball info
-    skillLevel: SkillLevel
+    skillLevel?: SkillLevel
     playStyle?: PlayStyle
     yearsPlaying?: number
     preferredHand?: Handedness
 
-    // Stats
     matchesPlayed: number
     winRate?: number
     currentRating?: number
     dupr?: number
 
-    // Privacy settings
     privacy: {
         allowMatchRequests: boolean
         showLocation: PrivacyType
         showStats: PrivacyType
+        showMatchHistory: PrivacyType
     } | null
 
     createdAt: string
+    updatedAt?: string
 }
 
 export interface UserProfileUpdate {
@@ -69,5 +55,5 @@ export interface UserProfileUpdate {
     winRate?: number
     currentRating?: number
     dupr?: number
-    privacy?: Partial<UserProfile['privacy']>
+    privacy?: Partial<NonNullable<UserProfile['privacy']>>
 }

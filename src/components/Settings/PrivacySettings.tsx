@@ -1,18 +1,18 @@
 import { useState } from 'react'
-import { UserSettings } from '../../types/settings'
+import type { UserSettings, SettingsUpdatePayload } from '../../types/settings'
 
 interface PrivacySettingsProps {
     settings: UserSettings
-    onSave: (updates: any) => Promise<void>
+    onSave: (updates: SettingsUpdatePayload) => Promise<void>
     isSaving: boolean
 }
 
 type PrivacyKey = keyof UserSettings['privacy']
 
 const visibilityOptions = [
-    { value: 'public', label: 'Everyone' },
-    { value: 'friends', label: 'Friends Only' },
-    { value: 'private', label: 'Only Me' },
+    { value: 'PUBLIC', label: 'Everyone' },
+    { value: 'FRIENDS', label: 'Friends Only' },
+    { value: 'PRIVATE', label: 'Only Me' },
 ]
 
 const selectFields: { key: PrivacyKey; label: string; desc: string }[] = [

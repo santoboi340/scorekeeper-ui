@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { UserSettings } from '../../types/settings'
+import type { UserSettings, SettingsUpdatePayload } from '../../types/settings'
 
 interface AccountSettingsProps {
     settings: UserSettings
-    onSave: (updates: any) => Promise<void>
+    onSave: (updates: SettingsUpdatePayload) => Promise<void>
     isSaving: boolean
 }
 

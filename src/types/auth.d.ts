@@ -1,12 +1,11 @@
 export type UserRole = 'USER' | 'ADMIN'
 
-// src/types/auth.ts
 export interface RegisterRequest {
     firstName: string
     lastName: string
     email: string
     password: string
-    role: 'USER' | 'ADMIN'
+    role: UserRole
 }
 
 export interface RegisterResponse {
@@ -21,11 +20,6 @@ export interface RegisterResponse {
     }
 }
 
-export interface AuthError {
-    message: string
-    code?: number
-    errors?: Partial<Record<keyof RegisterRequest, string>>
-}
 export interface LoginRequest {
     email: string
     password: string

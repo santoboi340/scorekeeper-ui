@@ -82,7 +82,7 @@ export default function ProfileEdit({
         winRate: data?.winRate ?? profile.winRate,
         currentRating: data?.currentRating ?? profile.currentRating,
         dupr: data?.dupr ?? profile.dupr,
-        privacy: data?.privacy ?? profile.privacy,
+        privacy: data?.privacy ?? profile.privacy ?? undefined,
     })
     const [isSaving, setIsSaving] = useState(false)
 
@@ -313,7 +313,7 @@ export default function ProfileEdit({
                                             unknown
                                         > | null
                                     )?.[key] as string) ||
-                                    'PUBLIC'
+                                    'public'
                                 }
                                 onChange={(e) =>
                                     updatePrivacy(key, e.target.value)

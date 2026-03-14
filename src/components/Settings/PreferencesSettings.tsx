@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { UserSettings } from '../../types/settings'
+import type { UserSettings, SettingsUpdatePayload } from '../../types/settings'
 
 interface PreferencesSettingsProps {
     settings: UserSettings
-    onSave: (updates: any) => Promise<void>
+    onSave: (updates: SettingsUpdatePayload) => Promise<void>
     isSaving: boolean
 }
 
@@ -32,7 +32,7 @@ export default function PreferencesSettings({ settings, onSave, isSaving }: Pref
     const [preferences, setPreferences] = useState(settings.preferences)
     const [hasChanges, setHasChanges] = useState(false)
 
-    const handleChange = (field: keyof typeof preferences, value: any) => {
+    const handleChange = (field: keyof typeof preferences, value: string) => {
         setPreferences((prev) => ({ ...prev, [field]: value }))
         setHasChanges(true)
     }

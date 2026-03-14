@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 const API_BASE = '/api/proxy'
 
 function getToken(): string | null {
@@ -20,10 +18,10 @@ export class ApiError extends Error {
     }
 }
 
-export async function apiCall<T = any>(
+export async function apiCall<T = unknown>(
     endpoint: string,
     method: string = 'GET',
-    body?: any
+    body?: Record<string, unknown>
 ): Promise<T> {
     const token = getToken()
 
