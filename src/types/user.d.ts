@@ -27,7 +27,7 @@ export interface User {
 export interface UserProfile {
     // Basic info
     id: string
-    username: string
+    userName: string
     displayName: string
     email: string
     avatar?: string

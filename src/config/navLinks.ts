@@ -9,9 +9,7 @@ export type NavLink = {
 
 export const getNavLinks = (user: User | null): NavLink[] => [
     { label: 'Home', href: '/' },
-    { label: 'Features', href: '/' },
-    { label: 'About', href: '/' },
-    { label: 'Contact', href: '/' },
+    { label: 'Players', href: '/players' },
     ...(user
         ? [
               // Place Protected Links Here

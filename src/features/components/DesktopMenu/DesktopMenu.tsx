@@ -1,29 +1,17 @@
 'use client'
 
 import Link from 'next/link'
-import { type DesktopMenuLink, DesktopMenuProps } from 'root/components/Navbar/DesktopMenu/DesktopMenu.d'
+import { DesktopMenuProps } from 'root/components/Navbar/DesktopMenu/DesktopMenu.d'
 import { Logo } from 'root/components/Logo'
 import { useAuth } from 'root/context/AuthContext'
-
+import { getNavLinks } from 'root/config/navLinks'
 
 const DesktopMenu = ({
     className = '',
     linkClassName = '',
 }: DesktopMenuProps) => {
     const { user, isAuthenticated, logout } = useAuth()
-
-    const defaultLinks: DesktopMenuLink[] = [
-        { label: 'Home', href: '/' },
-        { label: 'Features', href: '/' },
-        { label: 'About', href: '/' },
-        { label: 'Contact', href: '/' },
-        { label: 'Api Dashboard', href: '/api-dashboard', protected: true },
-        {
-            label: 'Profile',
-            href: `/profile/${user && user.uuid}`,
-            protected: true,
-        },
-    ]
+    const links = getNavLinks(user)
 
     return (
         <nav className={`${styles.container} ${className}`}>
@@ -33,13 +21,12 @@ const DesktopMenu = ({
 
                 {/* Navigation Links */}
                 <div className={styles.linksContainer}>
-                    {defaultLinks.map((link, index) =>
+                    {links.map((link) =>
                         !link.protected || isAuthenticated ? (
                             <Link
-                                key={index}
+                                key={link.label}
                                 href={link.href}
                                 className={`${styles.navLink} ${linkClassName}`}
-                            
                             >
                                 {link.label}
                             </Link>

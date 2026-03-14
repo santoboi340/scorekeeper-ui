@@ -96,8 +96,6 @@ export default function ProfileEdit({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        console.log('Submitting profile updates:', formData)
-        console.log('Event:', e)
         setIsSaving(true)
         try {
             await onSave(formData)
@@ -309,7 +307,12 @@ export default function ProfileEdit({
                             <select
                                 value={
                                     (formData.privacy?.[key] as string) ||
-                                    ((profile.privacy as Record<string, unknown> | null)?.[key] as string) ||
+                                    ((
+                                        profile.privacy as Record<
+                                            string,
+                                            unknown
+                                        > | null
+                                    )?.[key] as string) ||
                                     'PUBLIC'
                                 }
                                 onChange={(e) =>

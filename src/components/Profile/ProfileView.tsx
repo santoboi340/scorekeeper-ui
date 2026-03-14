@@ -3,7 +3,7 @@ import { UserProfile } from '../../types/user'
 
 interface ProfileViewProps {
     profile: UserProfile
-    onEdit: () => void
+    onEdit?: () => void
 }
 
 const StatCard = ({ label, value }: { label: string; value: string }) => (
@@ -60,12 +60,14 @@ export default function ProfileView({ profile, onEdit }: ProfileViewProps) {
                             <p className="text-cream/80 text-sm sm:text-base">{profile.location}</p>
                         )}
                     </div>
-                    <button
-                        onClick={onEdit}
-                        className="w-full sm:w-auto px-6 py-2 bg-pickleball-yellow text-primary-green rounded-lg hover:bg-gold transition-colors font-semibold shadow-md"
-                    >
-                        Edit Profile
-                    </button>
+                    {onEdit && (
+                        <button
+                            onClick={onEdit}
+                            className="w-full sm:w-auto px-6 py-2 bg-pickleball-yellow text-primary-green rounded-lg hover:bg-gold transition-colors font-semibold shadow-md"
+                        >
+                            Edit Profile
+                        </button>
+                    )}
                 </div>
             </div>
 
