@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { FaGoogle, FaGithub } from 'react-icons/fa'
 import { Logo } from 'root/components/Logo'
-import { useLoginApi } from 'root/hooks/useLoginApi'
+import { useLoginApi } from 'root/hooks/useAuthApi'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')

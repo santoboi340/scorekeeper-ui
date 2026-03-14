@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { FaGoogle, FaGithub } from 'react-icons/fa'
 import { Logo } from 'root/components/Logo'
-import { useRegisterApi } from 'root/hooks/useRegisterApi'
+import { useRegisterApi } from 'root/hooks/useAuthApi'
 import type { RegisterRequest } from 'root/types/auth'
 
 export default function RegisterPage() {

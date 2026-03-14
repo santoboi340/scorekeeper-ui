@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRegisterApi } from 'root/hooks/useRegisterApi'
+import { useRegisterApi } from 'root/hooks/useAuthApi'
 import type { RegisterRequest } from 'root/types/auth'
 
 const fields: { field: keyof RegisterRequest; label: string; type: string; minLength?: number }[] = [
