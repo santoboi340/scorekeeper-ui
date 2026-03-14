@@ -1,25 +1,23 @@
+import type { User } from '../types/user'
+
+export type { User }
+
 export interface AuthContextType {
     user: User | null
     isLoading: boolean
     isAuthenticated: boolean
-    login: (token: string) => void
+    login: (token: string, remember?: boolean) => void
     logout: () => void
 }
 
-export interface User {
-    id: string
-    uuid?: string
-    email: string
-}
-
 export interface JWTPayload {
-    sub?: string // Standard JWT "subject" claim (usually user ID)
-    userId?: string // Some APIs use this instead
+    sub?: string
+    userId?: string
     email: string
     firstname: string
     lastname: string
     role: string
-    exp: number // Expiration timestamp
-    iat: number // Issued at timestamp,
+    exp: number
+    iat: number
     uuid: string
 }

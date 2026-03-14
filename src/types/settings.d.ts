@@ -1,22 +1,19 @@
-// types/settings.ts
+import type { PrivacyType } from './user'
 
 export interface UserSettings {
-    // Account
     email: string
     username: string
 
-    // Privacy
     privacy: {
-        profileVisibility: 'public' | 'friends' | 'private'
-        showLocation: 'public' | 'friends' | 'private'
-        showStats: 'public' | 'friends' | 'private'
-        showMatchHistory: 'public' | 'friends' | 'private'
+        profileVisibility: PrivacyType
+        showLocation: PrivacyType
+        showStats: PrivacyType
+        showMatchHistory: PrivacyType
         allowMatchRequests: boolean
         showOnlineStatus: boolean
         allowFriendRequests: boolean
     }
 
-    // Notifications (all default to FALSE - opt-in only!)
     notifications: {
         email: {
             matchRequests: boolean
@@ -33,7 +30,6 @@ export interface UserSettings {
         }
     }
 
-    // Preferences
     preferences: {
         theme: 'light' | 'dark' | 'system'
         language: string
@@ -43,6 +39,8 @@ export interface UserSettings {
 }
 
 export interface SettingsUpdatePayload {
+    email?: string
+    username?: string
     privacy?: Partial<UserSettings['privacy']>
     notifications?: {
         email?: Partial<UserSettings['notifications']['email']>

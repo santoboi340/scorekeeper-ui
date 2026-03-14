@@ -1,58 +1,53 @@
-// types/user.ts
+export type SkillLevel = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED' | 'PRO'
+export type PlayStyle = 'AGGRESSIVE' | 'DEFENSIVE' | 'BALANCED' | 'STRATEGIC'
+export type Handedness = 'LEFT' | 'RIGHT' | 'AMBIDEXTROUS'
+export type PrivacyType = 'PUBLIC' | 'FRIENDS' | 'PRIVATE'
 
-export type SkillLevel =
-    | 'beginner'
-    | 'intermediate'
-    | 'advanced'
-    | 'pro'
-    | undefined
-export type PlayStyle =
-    | 'aggressive'
-    | 'defensive'
-    | 'balanced'
-    | 'strategic'
-    | undefined
-
-export type Handedness = 'left' | 'right' | 'ambidextrous'
-export type PrivacyType = 'public' | 'friends' | 'private'
 export interface User {
     id: string
+    uuid?: string
     email: string
     firstname?: string
     lastname?: string
     role?: 'user' | 'admin'
 }
 
-// src/types/user.ts
 export interface UserProfile {
-    // Basic info
     id: string
-    username: string
+    userName: string
     displayName: string
     email: string
     avatar?: string
     bio?: string
     location?: string
 
-    // Pickleball info
-    skillLevel: SkillLevel
+    skillLevel?: SkillLevel
     playStyle?: PlayStyle
     yearsPlaying?: number
     preferredHand?: Handedness
 
-    // Stats
     matchesPlayed: number
     winRate?: number
     currentRating?: number
+    dupr?: number
 
-    // Privacy settings
     privacy: {
         allowMatchRequests: boolean
         showLocation: PrivacyType
         showStats: PrivacyType
-    }
+        showMatchHistory: PrivacyType
+    } | null
 
     createdAt: string
+    updatedAt?: string
+}
+
+export interface UserProfilePreview {
+    userName: string
+    displayName: string | null
+    bio: string | null
+    dupr: number
+    avatar: string | null
 }
 
 export interface UserProfileUpdate {
@@ -64,5 +59,9 @@ export interface UserProfileUpdate {
     playStyle?: PlayStyle
     yearsPlaying?: number
     preferredHand?: Handedness
-    privacy?: Partial<UserProfile['privacy']>
+    matchesPlayed?: number
+    winRate?: number
+    currentRating?: number
+    dupr?: number
+    privacy?: Partial<NonNullable<UserProfile['privacy']>>
 }

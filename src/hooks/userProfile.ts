@@ -1,36 +1,88 @@
-// src/hooks/useProfile.ts
-import { useQuery } from '@tanstack/react-query'
-import type { UserProfile } from 'root/types/user'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import type { UserProfile, UserProfilePreview, UserProfileUpdate } from 'root/types/user'
 import { fetchApiUrl } from '../../globalVar'
 
-const useProfile = (uuid: any) => {
-    return useQuery({
-        // 1. queryKey: Unique identifier for this data
-        queryKey: ['profile', uuid],
+const BASE = '/api/v1/user/profile'
 
-        // 2. queryFn: Function that fetches the data
-        queryFn: async () => {
-            const apiUrl = await fetchApiUrl()
-            const token =
-                localStorage.getItem('access_token') ||
-                sessionStorage.getItem('access_token')
-
-            const response = await fetch(
-                `${apiUrl}/api/v1/user/profile/getProfile`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            )
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch profile')
-            }
-
-            return response.json() as Promise<UserProfile>
+async function profileFetch<T>(
+    endpoint: string,
+    options?: RequestInit
+): Promise<T> {
+    const apiUrl = await fetchApiUrl()
+    const token =
+        localStorage.getItem('access_token') ||
+        sessionStorage.getItem('access_token')
+    const res = await fetch(`${apiUrl}${BASE}${endpoint}`, {
+        ...options,
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            ...options?.headers,
         },
+    })
+    if (!res.ok) throw new Error(`Profile API error: ${res.status}`)
+    return res.json()
+}
+
+// GET /api/v1/user/profile/getProfile
+export const useProfile = (uuid: string) =>
+    useQuery({
+        queryKey: ['profile', uuid],
+        queryFn: () => profileFetch<UserProfile>('/getProfile'),
+    })
+
+// GET /api/v1/user/profile/me
+export const useMyProfile = () =>
+    useQuery({
+        queryKey: ['profile', 'me'],
+        queryFn: () => profileFetch<UserProfile>('/me'),
+    })
+
+// GET /api/v1/user/profile/{userName}
+export const useProfileByUsername = (userName: string) =>
+    useQuery({
+        queryKey: ['profile', userName],
+        queryFn: () => profileFetch<UserProfile>(`/${userName}`),
+        enabled: !!userName,
+    })
+
+// GET /api/v1/user/profile/preview/{userName}
+export const useProfilePreview = (userName: string, enabled = true) =>
+    useQuery({
+        queryKey: ['profile', 'preview', userName],
+        queryFn: () => profileFetch<UserProfilePreview>(`/preview/${userName}`),
+        enabled: !!userName && enabled,
+    })
+
+// GET /api/v1/user/profile/all
+export const useAllProfiles = () =>
+    useQuery({
+        queryKey: ['profiles'],
+        queryFn: () => profileFetch<UserProfile[]>('/all'),
+    })
+
+// POST /api/v1/user/profile/create
+export const useCreateProfile = () => {
+    const qc = useQueryClient()
+    return useMutation({
+        mutationFn: (data: UserProfileUpdate) =>
+            profileFetch<UserProfile>('/create', {
+                method: 'POST',
+                body: JSON.stringify(data),
+            }),
+        onSuccess: () => qc.invalidateQueries({ queryKey: ['profile'] }),
     })
 }
 
-export { useProfile }
+// PUT /api/v1/user/profile/update
+export const useUpdateProfile = () => {
+    const qc = useQueryClient()
+    return useMutation({
+        mutationFn: (data: UserProfileUpdate) =>
+            profileFetch<UserProfile>('/update', {
+                method: 'PATCH',
+                body: JSON.stringify(data),
+            }),
+        onSuccess: () => qc.invalidateQueries({ queryKey: ['profile'] }),
+    })
+}
