@@ -25,17 +25,18 @@ export default function ProfileView({ profile, onEdit }: ProfileViewProps) {
             label: 'Years Playing',
             value: `${profile.yearsPlaying} ${profile.yearsPlaying === 1 ? 'year' : 'years'}`,
         },
-        profile.preferredHand && {
-            label: 'Preferred Hand',
-            value: profile.preferredHand,
-        },
+        profile.preferredHand && { label: 'Preferred Hand', value: profile.preferredHand },
+        profile.matchesPlayed !== undefined && { label: 'Matches Played', value: `${profile.matchesPlayed}` },
+        profile.winRate !== undefined && { label: 'Win Rate', value: `${profile.winRate}%` },
+        profile.currentRating !== undefined && { label: 'Current Rating', value: `${profile.currentRating}` },
+        profile.dupr !== undefined && { label: 'DUPR', value: `${profile.dupr}` },
     ].filter(Boolean) as { label: string; value: string }[]
 
     return (
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
             {/* Header */}
             <div className="bg-primary-green p-4 sm:p-6 md:p-8">
-                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                <div className="flex flex-col sm:flex-row items-center gap-4">
                     <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-cream flex items-center justify-center overflow-hidden shrink-0 border-4 border-pickleball-yellow">
                         {profile.avatar ? (
                             <Image
@@ -55,6 +56,9 @@ export default function ProfileView({ profile, onEdit }: ProfileViewProps) {
                         <h1 className="text-2xl sm:text-3xl font-bold text-cream mb-1">
                             {profile.displayName}
                         </h1>
+                        {profile.location && (
+                            <p className="text-cream/80 text-sm sm:text-base">{profile.location}</p>
+                        )}
                     </div>
                     <button
                         onClick={onEdit}

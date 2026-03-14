@@ -80,7 +80,7 @@ export const useUpdateProfile = () => {
     return useMutation({
         mutationFn: (data: UserProfileUpdate) =>
             profileFetch<UserProfile>('/update', {
-                method: 'PUT',
+                method: 'PATCH',
                 body: JSON.stringify(data),
             }),
         onSuccess: () => qc.invalidateQueries({ queryKey: ['profile'] }),

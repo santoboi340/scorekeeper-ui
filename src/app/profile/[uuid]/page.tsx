@@ -2,20 +2,18 @@
 
 'use client'
 
-import { useProfile } from '../../../hooks/userProfile'
+import { useMyProfile, useUpdateProfile } from '../../../hooks/userProfile'
 import ProfileView from 'root/components/Profile/ProfileView'
 import ProfileEdit from 'root/components/Profile/ProfileEdit'
 import Link from 'next/link'
 import { ProtectedRoute } from 'root/components/ProtectedRoute/ProtectedRoute'
-import { useParams } from 'next/navigation'
 import { useState } from 'react'
 
 export default function ProfilePage() {
-    // Unwrap the params Promise
-    const { uuid } = useParams()
     const [isEditing, setIsEditing] = useState(false)
 
-    const { data, isLoading, isError, error } = useProfile(uuid)
+    const { data, isLoading, isError, error } = useMyProfile()
+    const { mutateAsync: updateProfile } = useUpdateProfile()
 
     if (isLoading) {
         return (
@@ -54,24 +52,23 @@ export default function ProfilePage() {
         <ProtectedRoute>
             <div className="min-h-screen bg-cream">
                 <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
-                    {!isLoading && (
-                        isEditing ? (
+                    {!isLoading &&
+                        (isEditing ? (
                             <ProfileEdit
                                 profile={data}
                                 onSave={async (updates) => {
                                     console.log('Saving updates:', updates)
+                                    await updateProfile(updates)
                                     setIsEditing(false)
                                 }}
                                 onCancel={() => setIsEditing(false)}
                             />
                         ) : (
-                            <>
-                                <h1 className="text-3xl font-bold">{data.displayName}</h1>
-                                <p>{data.bio}</p>
-                                <ProfileView profile={data} onEdit={() => setIsEditing(true)} />
-                            </>
-                        )
-                    )}
+                            <ProfileView
+                                profile={data}
+                                onEdit={() => setIsEditing(true)}
+                            />
+                        ))}
                 </div>
             </div>
         </ProtectedRoute>

@@ -1,20 +1,20 @@
 // types/user.ts
 
 export type SkillLevel =
-    | 'beginner'
-    | 'intermediate'
-    | 'advanced'
-    | 'pro'
+    | 'BEGINNER'
+    | 'INTERMEDIATE'
+    | 'ADVANCED'
+    | 'PRO'
     | undefined
 export type PlayStyle =
-    | 'aggressive'
-    | 'defensive'
-    | 'balanced'
-    | 'strategic'
+    | 'AGGRESSIVE'
+    | 'DEFENSIVE'
+    | 'BALANCED'
+    | 'STRATEGIC'
     | undefined
 
-export type Handedness = 'left' | 'right' | 'ambidextrous'
-export type PrivacyType = 'public' | 'friends' | 'private'
+export type Handedness = 'LEFT' | 'RIGHT' | 'AMBIDEXTROUS'
+export type PrivacyType = 'PUBLIC' | 'FRIENDS' | 'PRIVATE'
 export interface User {
     id: string
     email: string
@@ -44,13 +44,14 @@ export interface UserProfile {
     matchesPlayed: number
     winRate?: number
     currentRating?: number
+    dupr?: number
 
     // Privacy settings
     privacy: {
         allowMatchRequests: boolean
         showLocation: PrivacyType
         showStats: PrivacyType
-    }
+    } | null
 
     createdAt: string
 }
@@ -64,5 +65,9 @@ export interface UserProfileUpdate {
     playStyle?: PlayStyle
     yearsPlaying?: number
     preferredHand?: Handedness
+    matchesPlayed?: number
+    winRate?: number
+    currentRating?: number
+    dupr?: number
     privacy?: Partial<UserProfile['privacy']>
 }
