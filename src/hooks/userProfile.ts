@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import type { UserProfile, UserProfileUpdate } from 'root/types/user'
+import type { UserProfile, UserProfilePreview, UserProfileUpdate } from 'root/types/user'
 import { fetchApiUrl } from '../../globalVar'
 
 const BASE = '/api/v1/user/profile'
@@ -47,11 +47,11 @@ export const useProfileByUsername = (userName: string) =>
     })
 
 // GET /api/v1/user/profile/preview/{userName}
-export const useProfilePreview = (userName: string) =>
+export const useProfilePreview = (userName: string, enabled = true) =>
     useQuery({
         queryKey: ['profile', 'preview', userName],
-        queryFn: () => profileFetch<UserProfile>(`/preview/${userName}`),
-        enabled: !!userName,
+        queryFn: () => profileFetch<UserProfilePreview>(`/preview/${userName}`),
+        enabled: !!userName && enabled,
     })
 
 // GET /api/v1/user/profile/all

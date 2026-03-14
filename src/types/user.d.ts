@@ -42,6 +42,14 @@ export interface UserProfile {
     updatedAt?: string
 }
 
+export interface UserProfilePreview {
+    userName: string
+    displayName: string | null
+    bio: string | null
+    dupr: number
+    avatar: string | null
+}
+
 export interface UserProfileUpdate {
     displayName?: string
     avatar?: string
