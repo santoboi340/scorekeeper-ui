@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import type { User } from 'root/context/AuthContext.d'
+import { useMyProfile } from 'root/hooks/userProfile'
 
 interface UserAvatarPanelProps {
     user: User
@@ -10,9 +11,10 @@ interface UserAvatarPanelProps {
 }
 
 const UserAvatarPanel = ({ user, onLogout, compact = false }: UserAvatarPanelProps) => {
+    const { data: profile } = useMyProfile()
     const initial = (user.firstname ?? user.email).charAt(0).toUpperCase()
-    const profileHref = `/profile/${user.uuid}`
-    const settingsHref = `/profile/${user.uuid}/settings`
+    const profileHref = profile?.userName ? `/profile/${profile.userName}` : '#'
+    const settingsHref = profile?.userName ? `/profile/${profile.userName}/settings` : '#'
 
     return (
         <div className={`flex ${compact ? 'flex-row items-center gap-3' : 'flex-col items-center gap-1'}`}>
