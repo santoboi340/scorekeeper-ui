@@ -1,6 +1,13 @@
 'use client'
 
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react'
+import {
+    createContext,
+    useContext,
+    useEffect,
+    useState,
+    useCallback,
+    type ReactNode,
+} from 'react'
 import type { User, JWTPayload, AuthContextType } from './AuthContext.d'
 import { jwtDecode } from 'jwt-decode'
 import { useRouter } from 'next/navigation'
@@ -17,12 +24,16 @@ const extractUser = (decoded: JWTPayload): User => ({
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
+    console.log('current user is', user)
     const [isLoading, setIsLoading] = useState(true)
     const router = useRouter()
 
     useEffect(() => {
         const token = tokenStorage.get()
-        if (!token) { setIsLoading(false); return }
+        if (!token) {
+            setIsLoading(false)
+            return
+        }
 
         try {
             const decoded = jwtDecode<JWTPayload>(token)
@@ -55,7 +66,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, [router])
 
     return (
-        <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, logout }}>
+        <AuthContext.Provider
+            value={{ user, isLoading, isAuthenticated: !!user, login, logout }}
+        >
             {children}
         </AuthContext.Provider>
     )
